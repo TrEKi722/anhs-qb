@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AAV Quote Book</title>
+  <style>
+    body { margin: 0; background: #111; }
+    #gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 8px;
+      padding: 8px;
+    }
+    #gallery img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+  <div id="gallery"></div>
+  <script>
+    const CDN = "https://cdn.ekinney.com";
+    const WORKER = "https://your-worker.workers.dev";
+    const PREFIX = "qb/";
+
+    async function loadGallery() {
+      const res = await fetch(`${WORKER}/list?prefix=${PREFIX}`);
+      const keys = await res.json();
+      const gallery = document.getElementById("gallery");
+
+      for (const key of keys) {
+        const img = document.createElement("img");
+        img.src = `${CDN}/${key}`;
+        img.loading = "lazy";
+        gallery.appendChild(img);
+      }
+    }
+
+    loadGallery();
+  </script>
+</body>
+</html>
