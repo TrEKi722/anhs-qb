@@ -2,3 +2,8 @@
 binding = "MY_BUCKET"
 bucket_name = "cdn"
 compatibility_date = "2026-04-27"
+
+[observability]
+[observability.logs]
+enabled = true
+invocation_logs = true
