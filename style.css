@@ -39,9 +39,20 @@ body { margin: 0; background: #111; }
     justify-content: center;
 }
 
+/* Mobile responsiveness */
 @media (max-width: 600px) {
+    .floating {
+        bottom: 20px;
+        right: 20px;
+    }
+
     .floating button {
-        width: 125px;
+        width: 80px;
+    }
+
+    .floating button img {
+        width: 40px;
+        height: 40px;
     }
 }
 
