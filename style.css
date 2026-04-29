@@ -41,7 +41,7 @@ body { margin: 0; background: #111; }
 
 @media (max-width: 600px) {
     .floating button {
-        width: 88px;
+        width: 125px;
     }
 }
 
