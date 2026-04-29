@@ -32,7 +32,18 @@ body { margin: 0; background: #111; }
     border: none;
     border-radius: 100%;
     aspect-ratio: 1;
-    cursor: pointer;}
+    cursor: pointer;
+    width: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+    .floating button {
+        width: 88px;
+    }
+}
 
 /* ------------------------ */
 /* ----- Modal Styles ----- */
