@@ -1,4 +1,21 @@
-body { margin: 0; background: #111; }
+/* ------------------------- */
+/* ----- Global Styles ----- */
+/* ------------------------- */
+
+@import url('https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap');
+
+body { 
+    margin: 0; background: #111;
+    font: 'Tektur', sans-serif;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+p {
+    font-size: 1.2rem;
+}
 
 /* -------------------------- */
 /* ----- Gallery Styles ----- */
@@ -78,6 +95,9 @@ body { margin: 0; background: #111; }
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Modal Content */
