@@ -1,7 +1,6 @@
 [[r2_buckets]]
-binding = "MY_BUCKET"
+binding = "R2"
 bucket_name = "cdn"
-compatibility_date = "2026-04-27"
 
 [observability]
 enabled = false
