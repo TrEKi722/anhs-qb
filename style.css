@@ -41,18 +41,24 @@ body { margin: 0; background: #111; }
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {
+    #gallery {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+
     .floating {
         bottom: 20px;
         right: 20px;
     }
 
     .floating button {
-        width: 100px;
+        width: 64px;
     }
 
     .floating button img {
-        width: 40px;
-        height: 40px;
+        width: 32px;
+        height: 32px;
     }
 }
 
