@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AAV Quote Book</title>
-  <style>
-    body { margin: 0; background: #111; }
-    #gallery {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
-        gap: 8px;
-        padding: 3rem;
-    }
-    #gallery img {
-        width: 100%;
-        object-fit: cover;
-        padding-bottom: 3rem;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>AAV Quote Book</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div>
+        <button class="floating" id="login-btn">Login</button>
+    </div>
     <div id="gallery"></div>
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <span class="close" id="login-close">&times;</span>
+            <h2>Login</h2>
+            <form id="login-form">
+                <label for="username">Username:</label><br>
+                <input type="text" id="username" name="username"><br>
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password"><br><br>
+                <input type="submit" value="Login">
+            </form>
+        </div>
+    </div>
+
     <script>
+        /* ----------- */
+        /* - Gallery - */
+        /* ----------- */
+
         const CDN = "https://cdn.ekinney.com";
         const WORKER = "https://list-cdn-objects.722kinney.workers.dev";
         const PREFIX = "qb/";
@@ -39,6 +47,29 @@
         }
 
         loadGallery();
+        
+        /* ----------- */
+        /* -- Modal -- */
+        /* ----------- */
+
+        var modal = document.getElementById("login-modal");
+        var btn = document.getElementById("login-btn");
+        var span = document.getElementsByClassName("close")[0];
+        
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+        
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        
+        window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+        }
+
     </script>
 </body>
 </html>
