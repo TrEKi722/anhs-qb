@@ -16,7 +16,10 @@ export default {
       if (url.pathname === "/list") {
         const prefix = url.searchParams.get("prefix") ?? "";
         const objects = await env.R2.list({ prefix });
-        return new Response(JSON.stringify(objects.objects.map(o => o.key)), {
+        return new Response(JSON.stringify(objects.objects
+                                            .map(o => o.key)
+                                            .filter(key => !key.endsWith("/"))),
+        {
           headers: {
             ...corsHeaders,
             "Content-Type": "application/json",
