@@ -107,11 +107,30 @@ p {
 .modal-content {
     background-color: #2d2d2d;
     box-shadow: #000 0px 5px 15px;
+    color: white;
     margin: auto;
     padding: 20px;
     border: none;
     border-radius: 15px;
     width: 40vw;
+}
+
+.modal-content label {
+    margin-top: .5rem;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="email"],
+.modal-content input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px 0;
+    font-size: 1.3rem;
+    font-family: Arial;
+    color: #333;
+    background: white;
+    border: none;
+    border-radius: 8px;
 }
 
 /* The Close Button */

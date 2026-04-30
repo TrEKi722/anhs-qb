@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="floating" id="actions-container">
+    <div class="floating" id="actions-container" style="display:none;">
         <button id="upload-quote-btn">
             <img src="media/uploadB.svg" alt="Upload Quote">
         </button>
@@ -22,27 +22,27 @@
     </div>
     </div>
     <div id="gallery"></div>
-    <div class="modal" id="login-modal">
+    <div class="modal" id="acnt-modal">
         <div class="modal-content">
-            <span class="close" id="login-close">&times;</span>
+            <span class="close" id="acnt-close">&times;</span>
             <h2>Login</h2>
             <form id="login-form">
-                <label for="email">Email:</label><br>
+                <label for="email">Email</label><br>
                 <input type="text" id="email" name="email" placeholder="example@example.com"><br>
-                <label for="password">Password:</label><br>
+                <label for="password">Password</label><br>
                 <input type="password" id="password" name="password" placeholder="Password"><br><br>
                 <input onclick="login(document.getElementById('email').value, document.getElementById('password').value)" type="submit" value="Login">
-                <p>Don't have an account? <a href="#" onclick="document.getElementById('login-form').style.display='none'; document.getElementById('signup-form').style.display='flex';" id="show-signup">Sign up here</a></p>
+                <p>Don't have an account? <a href="#" onclick="document.getElementById('login-form').style.display='none'; document.getElementById('signup-form').style.removeProperty('display');" id="show-signup">Sign up here</a></p>
             </form>
             <form id="signup-form" style="display:none;">
-                <label for="signup-email">Email:</label><br>
+                <label for="signup-email">Email</label><br>
                 <input type="text" id="signup-email" name="signup-email" placeholder="example@example.com"><br>
-                <label for="signup-password">Password:</label><br>
+                <label for="signup-password">Password</label><br>
                 <input type="password" id="signup-password" name="signup-password" placeholder="Password"><br><br>
-                <label for="signup-confirm-password">Confirm Password:</label><br>
+                <label for="signup-confirm-password">Confirm Password</label><br>
                 <input type="password" id="signup-confirm-password" name="signup-confirm-password" placeholder="Confirm Password"><br><br>
                 <input onclick="signup(document.getElementById('signup-email').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value)" type="submit" value="Sign Up">
-                <p>Already have an account? <a href="#" onclick="document.getElementById('login-form').style.display='flex'; document.getElementById('signup-form').style.display='none';" id="show-login">Login here</a></p>
+                <p>Already have an account? <a href="#" onclick="document.getElementById('login-form').style.removeProperty('display'); document.getElementById('signup-form').style.display='none';" id="show-login">Login here</a></p>
             </form>
         </div>
     </div>

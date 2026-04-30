@@ -21,24 +21,24 @@ async function loadGallery() {
 loadGallery();
 
 /* ----------- */
-/* -- Modal -- */
+/* -- Modals -- */
 /* ----------- */
 
-var modal = document.getElementById("login-modal");
-var btn = document.getElementById("login-btn");
-var span = document.getElementsByClassName("close")[0];
+var acntModal = document.getElementById("acnt-modal");
+var acntBtn = document.getElementById("acnt-btn");
+var acntSpan = document.getElementsByClassName("close")[0];
 
-btn.onclick = function() {
-    modal.style.display = "flex";
+acntBtn.onclick = function() {
+    acntModal.style.display = "flex";
 }
 
-span.onclick = function() {
-    modal.style.display = "none";
+acntSpan.onclick = function() {
+    acntModal.style.display = "none";
 }
 
 window.onclick = function(event) {
-if (event.target == modal) {
-    modal.style.display = "none";
+if (event.target == acntModal) {
+    acntModal.style.display = "none";
 }
 }
 
