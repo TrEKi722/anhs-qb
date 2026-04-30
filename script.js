@@ -48,14 +48,14 @@ if (event.target == modal) {
 
 const SUPABASE_URL = "https://pdvxvgcigowwnfqpjjni.supabase.co/rest/v1/";
 const SUPABASE_KEY = "sb_publishable_CjflF9tunFsNyONxBlHazw_6E2metQ-";
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseC = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let authenticated = false;
 
 async function login(em, pa) {
     if (!em || !pa) return alert("Please enter both email and password.");
 
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseC.auth.signInWithPassword({
         email: em,
         password: pa,
     })
@@ -71,7 +71,7 @@ async function signup(em, pa, paConfirm) {
     if (!em || !pa || !paConfirm) return alert("Please fill in all fields.");
     if (pa !== paConfirm) return alert("Passwords do not match.");
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseC.auth.signUp({
         email: em,
         password: pa,
     });
