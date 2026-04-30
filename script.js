@@ -48,7 +48,7 @@ if (event.target == modal) {
 
 const SUPABASE_URL = "https://pdvxvgcigowwnfqpjjni.supabase.co/rest/v1/";
 const SUPABASE_KEY = "sb_publishable_CjflF9tunFsNyONxBlHazw_6E2metQ-";
-const supabaseC = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseC = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let authenticated = false;
 
