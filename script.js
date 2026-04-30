@@ -46,7 +46,7 @@ if (event.target == acntModal) {
 /* - Supabase - */
 /* ------------ */
 
-const SUPABASE_URL = "https://pdvxvgcigowwnfqpjjni.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://pdvxvgcigowwnfqpjjni.supabase.co/";
 const SUPABASE_KEY = "sb_publishable_CjflF9tunFsNyONxBlHazw_6E2metQ-";
 const supabaseC = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
