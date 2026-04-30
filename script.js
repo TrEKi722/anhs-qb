@@ -7,15 +7,15 @@ const WORKER = "https://list-cdn-objects.722kinney.workers.dev";
 const PREFIX = "qb/";
 
 async function loadGallery() {
-const res = await fetch(`${WORKER}/list?prefix=${PREFIX}`);
-const keys = await res.json();
-const gallery = document.getElementById("gallery");
+    const res = await fetch(`${WORKER}/list?prefix=${PREFIX}`);
+    const keys = await res.json();
+    const gallery = document.getElementById("gallery");
 
-for (const key of keys) {
-    const img = document.createElement("img");
-    img.src = `${CDN}/${key}`;
-    gallery.appendChild(img);
-}
+    for (const key of keys) {
+        const img = document.createElement("img");
+        img.src = `${CDN}/${key}`;
+        gallery.appendChild(img);
+    }
 }
 
 loadGallery();
@@ -52,7 +52,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let authenticated = false;
 
-function login(em, pa) {
+async function login(em, pa) {
     if (!em || !pa) return alert("Please enter both email and password.");
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -67,7 +67,7 @@ function login(em, pa) {
     }
 }
 
-function signup(em, pa, paConfirm) {
+async function signup(em, pa, paConfirm) {
     if (!em || !pa || !paConfirm) return alert("Please fill in all fields.");
     if (pa !== paConfirm) return alert("Passwords do not match.");
 
