@@ -6,7 +6,7 @@
 
 body { 
     margin: 0; background: #111;
-    font: 'Tektur', sans-serif;
+    font-family: 'Tektur', sans-serif;
 }
 
 h2 {
@@ -33,6 +33,15 @@ p {
     object-fit: cover;
 }
 
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    #gallery {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+        gap: 1rem;
+    }
+}
+
 /* ------------------------- */
 /* ----- Button Styles ----- */
 /* ------------------------- */
@@ -40,6 +49,7 @@ p {
 .floating {
     position: -webkit-fixed;
     position: fixed;
+    display: flex;
     bottom: 10px;
     right: 10px;
     z-index: 9999;
@@ -54,16 +64,11 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0.25rem;
 }
 
 /* Mobile responsiveness */
 @media (max-width: 600px) {
-    #gallery {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-        gap: 1rem;
-    }
-
     .floating {
         bottom: 20px;
         right: 20px;
