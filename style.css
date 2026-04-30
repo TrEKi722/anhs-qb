@@ -123,9 +123,10 @@ p {
 .modal-content input[type="email"],
 .modal-content input[type="password"] {
     width: 100%;
+    box-sizing: border-box;
     padding: 10px;
     margin: 5px 0 15px 0;
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-family: Arial;
     color: #333;
     background: white;
@@ -146,4 +147,11 @@ p {
     color: #000;
     text-decoration: none;
     cursor: pointer;
-}  
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 80vw;
+    }
+}
