@@ -63,6 +63,7 @@ async function login(em, pa) {
     if (!error) {
         authenticated = true;
         document.getElementById("login-btn-container").style.display = "none";
+        document.getElementById("actions-container").style.display = "flex";
         modal.style.display = "none";
     }
 }
@@ -79,6 +80,19 @@ async function signup(em, pa, paConfirm) {
     if (!error) {
         authenticated = true;
         document.getElementById("login-btn-container").style.display = "none";
+        document.getElementById("actions-container").style.display = "flex";
         modal.style.display = "none";
+    }
+}
+
+/* ------------------------ */
+/* ---- Initialization ---- */
+/* ------------------------ */
+
+window.DOMContentLoaded = () => {
+    if (supabaseC.auth.getSession()) {
+        authenticated = true;
+        document.getElementById("login-btn-container").style.display = "none";
+        document.getElementById("actions-container").style.display = "flex";
     }
 }
