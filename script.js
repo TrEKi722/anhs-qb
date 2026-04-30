@@ -25,10 +25,10 @@ loadGallery();
 /* ----------- */
 
 var acntModal = document.getElementById("acnt-modal");
-var acntBtn = document.getElementById("acnt-btn");
+var loginBtn = document.getElementById("login-btn");
 var acntSpan = document.getElementsByClassName("close")[0];
 
-acntBtn.onclick = function() {
+loginBtn.onclick = function() {
     acntModal.style.display = "flex";
 }
 
