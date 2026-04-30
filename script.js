@@ -85,6 +85,15 @@ async function signup(em, pa, paConfirm) {
     }
 }
 
+async function logout() {
+    const { error } = await supabaseC.auth.signOut();
+    if (!error) {
+        authenticated = false;
+        document.getElementById("login-btn-container").style.display = "flex";
+        document.getElementById("actions-container").style.display = "none";
+    }
+}
+
 /* ------------------------ */
 /* ---- Initialization ---- */
 /* ------------------------ */
