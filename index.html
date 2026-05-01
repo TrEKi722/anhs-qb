@@ -26,12 +26,12 @@
         <div class="modal-content">
             <span class="close" id="acnt-close">&times;</span>
             <h2>Login</h2>
-            <form id="login-form">
+            <form id="login-form" onsubmit="login(document.getElementById('email').value, document.getElementById('password').value);return false;">
                 <label for="email">Email</label><br>
                 <input type="text" id="email" name="email" placeholder="example@example.com"><br>
                 <label for="password">Password</label><br>
                 <input type="password" id="password" name="password" placeholder="Password"><br><br>
-                <input onclick="login(document.getElementById('email').value, document.getElementById('password').value)" type="submit" value="Login">
+                <input type="submit" value="Login">
                 <p>Don't have an account? <a href="#" onclick="document.getElementById('login-form').style.display='none'; document.getElementById('signup-form').style.removeProperty('display');" id="show-signup">Sign up here</a></p>
             </form>
             <form id="signup-form" style="display:none;">
