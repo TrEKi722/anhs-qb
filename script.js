@@ -98,7 +98,7 @@ async function logout() {
 /* ---- Initialization ---- */
 /* ------------------------ */
 
-window.DOMContentLoaded = () => {
+document.DOMContentLoaded = () => {
     if (supabaseC.auth.getSession()) {
         authenticated = true;
         document.getElementById("login-btn-container").style.display = "none";
