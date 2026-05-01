@@ -30,7 +30,7 @@
                 <label for="email">Email</label><br>
                 <input type="text" id="email" name="email" placeholder="example@example.com"><br>
                 <label for="password">Password</label><br>
-                <input type="password" id="password" name="password" placeholder="Password"><br><br>
+                <input type="password" id="password" name="password" placeholder="Password"><br>
                 <input type="submit" value="Login">
                 <p>Don't have an account? <a href="#" onclick="document.getElementById('login-form').style.display='none'; document.getElementById('signup-form').style.removeProperty('display');" id="show-signup">Sign up here</a></p>
             </form>
@@ -38,9 +38,9 @@
                 <label for="signup-email">Email</label><br>
                 <input type="text" id="signup-email" name="signup-email" placeholder="example@example.com"><br>
                 <label for="signup-password">Password</label><br>
-                <input type="password" id="signup-password" name="signup-password" placeholder="Password"><br><br>
+                <input type="password" id="signup-password" name="signup-password" placeholder="Password"><br>
                 <label for="signup-confirm-password">Confirm Password</label><br>
-                <input type="password" id="signup-confirm-password" name="signup-confirm-password" placeholder="Confirm Password"><br><br>
+                <input type="password" id="signup-confirm-password" name="signup-confirm-password" placeholder="Confirm Password"><br>
                 <input onclick="signup(document.getElementById('signup-email').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value)" type="submit" value="Sign Up">
                 <p>Already have an account? <a href="#" onclick="document.getElementById('login-form').style.removeProperty('display'); document.getElementById('signup-form').style.display='none';" id="show-login">Login here</a></p>
             </form>

@@ -64,7 +64,9 @@ async function login(em, pa) {
         authenticated = true;
         document.getElementById("login-btn-container").style.display = "none";
         document.getElementById("actions-container").style.display = "flex";
-        modal.style.display = "none";
+        acntModal.style.display = "none";
+    } else {
+        
     }
 }
 
@@ -81,7 +83,7 @@ async function signup(em, pa, paConfirm) {
         authenticated = true;
         document.getElementById("login-btn-container").style.display = "none";
         document.getElementById("actions-container").style.display = "flex";
-        modal.style.display = "none";
+        acntModal.style.display = "none";
     }
 }
 

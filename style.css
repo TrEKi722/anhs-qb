@@ -42,9 +42,9 @@ p {
     }
 }
 
-/* ------------------------- */
-/* ----- Button Styles ----- */
-/* ------------------------- */
+/* --------------------------- */
+/* ----- Floating Styles ----- */
+/* --------------------------- */
 
 .floating {
     position: -webkit-fixed;
@@ -115,6 +115,7 @@ p {
     width: 40vw;
 }
 
+/* Modal Forms */
 .modal-content label {
     margin-top: .5rem;
 }
@@ -130,6 +131,13 @@ p {
     font-family: Arial;
     color: #333;
     background: white;
+    border: none;
+    border-radius: 8px;
+}
+
+.modal-content input[type="submit"] {
+    font-family: 'Tektur';
+    font-size: 1.1rem;
     border: none;
     border-radius: 8px;
 }
