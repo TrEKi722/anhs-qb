@@ -99,7 +99,8 @@ async function logout() {
 /* ------------------------ */
 
 document.addEventListener("DOMContentLoaded", (event) => {
-    if (supabaseC.auth.getSession()) {
+    const data = supabaseC.auth.getSession();
+    if (!!data.session) {
         authenticated = true;
         document.getElementById("login-btn-container").style.display = "none";
         document.getElementById("actions-container").style.display = "flex";
