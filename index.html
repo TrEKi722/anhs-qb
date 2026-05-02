@@ -21,14 +21,14 @@
         </button>
     </div>
     <div class="nav" id="nav">
-        
+
     </div>
     <div id="gallery"></div>
     <div class="modal" id="acnt-modal">
         <div class="modal-content">
             <span class="close" id="acnt-close">&times;</span>
             <h2>Login</h2>
-            <form id="login-form" onsubmit="login(document.getElementById('email').value, document.getElementById('password').value);return false;">
+            <form id="login-form" onsubmit="login(document.getElementById('email').value, document.getElementById('password').value); return false;">
                 <label for="email">Email</label><br>
                 <input type="text" id="email" name="email" placeholder="example@example.com"><br>
                 <label for="password">Password</label><br>
@@ -36,7 +36,7 @@
                 <input type="submit" value="Login">
                 <p>Don't have an account? <a href="#" onclick="document.getElementById('login-form').style.display='none'; document.getElementById('signup-form').style.removeProperty('display');" id="show-signup">Sign up here</a></p>
             </form>
-            <form id="signup-form" style="display:none;">
+            <form id="signup-form" style="display:none;" onsubmit="signup(document.getElementById('signup-email').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value, document.getElementById('signup-code').value); return false;">
                 <label for="signup-email">Email</label><br>
                 <input type="text" id="signup-email" name="signup-email" placeholder="example@example.com"><br>
                 <label for="signup-password">Password</label><br>
@@ -45,7 +45,7 @@
                 <input type="password" id="signup-confirm-password" name="signup-confirm-password" placeholder="Confirm Password"><br>
                 <label for="signup-code">Access Code</label><br>
                 <input type="password" id="signup-code" name="signup-code" placeholder="Access code"><br>
-                <input onclick="signup(document.getElementById('signup-email').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value, document.getElementById('signup-code').value)" type="submit" value="Sign Up">
+                <input type="submit" value="Sign Up">
                 <p>Already have an account? <a href="#" onclick="document.getElementById('login-form').style.removeProperty('display'); document.getElementById('signup-form').style.display='none';" id="show-login">Login here</a></p>
             </form>
         </div>

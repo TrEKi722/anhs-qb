@@ -13,19 +13,7 @@ export async function onRequestPost(context) {
     return Response.json({ error: "Missing required fields." }, { status: 400 });
   }
 
-  // Constant-time comparison — Workers runtime: crypto.subtle.timingSafeEqual is synchronous
-  const enc = new TextEncoder();
-  const expected = env.ACCESS_CODE ?? "";
-  const a = enc.encode(expected);
-  const b = enc.encode(accessCode);
-  const len = Math.max(a.length, b.length);
-  const aBuf = new Uint8Array(len);
-  const bBuf = new Uint8Array(len);
-  aBuf.set(a);
-  bBuf.set(b);
-  const codesMatch = crypto.subtle.timingSafeEqual(aBuf, bBuf) && a.length === b.length;
-
-  if (!codesMatch) {
+  if (accessCode !== env.ACCESS_CODE) {
     return Response.json({ error: "Invalid access code." }, { status: 403 });
   }
 
