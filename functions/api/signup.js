@@ -27,7 +27,7 @@ export async function onRequestPost(context) {
       "Authorization": `Bearer ${serviceKey}`,
       "apikey": serviceKey,
     },
-    body: JSON.stringify({ email, password, email_confirm: false }),
+    body: JSON.stringify({ email, password, email_confirm: true }),
   });
 
   const supaData = await supaRes.json();

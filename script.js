@@ -111,7 +111,7 @@ async function signup(em, pa, paConfirm, code) {
     }
 
     if (data.success) {
-        showToast("Account created! Please check your email to confirm your address.");
+        showToast("Account created! You can now log in.");
         acntModal.style.display = "none";
     } else {
         const signupErrors = {
