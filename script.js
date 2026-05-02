@@ -94,29 +94,35 @@ async function login(em, pa) {
     }
 }
 
-async function signup(em, pa, paConfirm) {
-    if (!em || !pa || !paConfirm) return showToast("Please fill in all fields.");
+async function signup(em, pa, paConfirm, code) {
+    if (!em || !pa || !paConfirm || !code) return showToast("Please fill in all fields.");
     if (pa !== paConfirm) return showToast("Passwords do not match.");
 
-    const { data, error } = await supabaseC.auth.signUp({
-        email: em,
-        password: pa,
-    });
+    let res, data;
+    try {
+        res = await fetch("/api/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: em, password: pa, accessCode: code }),
+        });
+        data = await res.json();
+    } catch {
+        return showToast("Network error. Please try again.");
+    }
 
-    if (!error) {
-        authenticated = true;
-        document.getElementById("login-btn-container").style.display = "none";
-        document.getElementById("actions-container").style.display = "flex";
+    if (data.success) {
+        showToast("Account created! Please check your email to confirm your address.");
         acntModal.style.display = "none";
     } else {
         const signupErrors = {
+            "Invalid access code.": "Incorrect access code.",
             "User already registered": "An account with that email already exists.",
             "Password should be at least 8 characters": "Password must be at least 8 characters.",
             "Unable to validate email address: invalid format": "Please enter a valid email address.",
             "Too many requests": "Too many attempts. Please wait a moment and try again.",
         };
-        showToast(signupErrors[error.message] ?? "Sign up failed. Please try again.");
-        console.log(error);
+        showToast(signupErrors[data.error] ?? data.error ?? "Sign up failed. Please try again.");
+        console.log(data.error);
     }
 }
 

@@ -43,7 +43,9 @@
                 <input type="password" id="signup-password" name="signup-password" placeholder="Password"><br>
                 <label for="signup-confirm-password">Confirm Password</label><br>
                 <input type="password" id="signup-confirm-password" name="signup-confirm-password" placeholder="Confirm Password"><br>
-                <input onclick="signup(document.getElementById('signup-email').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value)" type="submit" value="Sign Up">
+                <label for="signup-code">Access Code</label><br>
+                <input type="password" id="signup-code" name="signup-code" placeholder="Access code"><br>
+                <input onclick="signup(document.getElementById('signup-email').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value, document.getElementById('signup-code').value)" type="submit" value="Sign Up">
                 <p>Already have an account? <a href="#" onclick="document.getElementById('login-form').style.removeProperty('display'); document.getElementById('signup-form').style.display='none';" id="show-login">Login here</a></p>
             </form>
         </div>
