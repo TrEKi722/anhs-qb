@@ -63,9 +63,26 @@ acntSpan.onclick = function() {
 }
 
 window.onclick = function(event) {
-if (event.target == acntModal) {
-    acntModal.style.display = "none";
+    if (event.target == acntModal) {
+        acntModal.style.display = "none";
+    }
 }
+var uploadModal = document.getElementById("upload-modal");
+var uploadButton = document.getElementById("upload-quote-btn");
+var uploadSpan = document.getElementsByClassName("close")[1];
+
+uploadButton.onclick = function() {
+    uploadModal.style.display = "flex";
+}
+
+uploadSpan.onclick = function() {
+    uploadModal.style.display = "none";
+}
+
+window.onclick = function(event) {
+    if (event.target == uploadModal) {
+        uploadModal.style.display = "none";
+    }
 }
 
 /* ------------ */
