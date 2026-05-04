@@ -54,11 +54,9 @@
         <div class="modal-content">
             <span class="close" id="upload-close">&times;</span>
             <h2>Upload Quote</h2>
-            <form id="upload-form" onsubmit="">
+            <p>This will upload to the folder you are currently viewing - (<script>document.write(new URLSearchParams(window.location.search).get('folder') || 'unknown')</script>)</p>
+            <form id="upload-form" onsubmit="uploadFile(); return false;">
                 <input type="file" name="file" id="file-input">
-                <select name="Folder" id="folder">
-                    <option></option>
-                </select>
                 <input type="submit" value="Upload">
             </form>
             <pre id="result"></pre>

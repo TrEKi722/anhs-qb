@@ -63,9 +63,6 @@ acntSpan.onclick = function() {
 }
 
 window.onclick = function(event) {
-    if (event.target == acntModal) {
-        acntModal.style.display = "none";
-    }
 }
 var uploadModal = document.getElementById("upload-modal");
 var uploadButton = document.getElementById("upload-quote-btn");
@@ -82,6 +79,9 @@ uploadSpan.onclick = function() {
 window.onclick = function(event) {
     if (event.target == uploadModal) {
         uploadModal.style.display = "none";
+    }    
+    if (event.target == acntModal) {
+        acntModal.style.display = "none";
     }
 }
 
@@ -172,13 +172,11 @@ async function logout() {
 const form = document.getElementById('upload-form');
 const resultEl = document.getElementById('result');
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
-
+async function uploadFile() {
   const file = document.getElementById('file-input').files[0];
-  const folder = document.getElementById('folder-input').value.trim();
+  const folder = new URLSearchParams(window.location.search).get('folder');
   if (!file) return showToast('Please choose a file.');
-  if (!folder) return showToast('Please enter a folder.');
+  if (!folder) return showToast('No folder in URL.');
 
   const { data: sessionData } = await supabaseC.auth.getSession();
   const token = sessionData?.session?.access_token;
@@ -204,7 +202,7 @@ form.addEventListener('submit', async (e) => {
   } catch (err) {
     resultEl.textContent = 'Request failed: ' + err.message;
   }
-});
+};
 
 /* ------------- */
 /* --- Toast --- */
