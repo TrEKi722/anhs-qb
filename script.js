@@ -35,7 +35,20 @@ async function loadGallery() {
     }
 }
 
+function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}  
+
 loadGallery();
+
+// Shuffle images within the gallery
+const gallery = document.getElementById('gallery');
+const imgs = Array.from(gallery.children);
+shuffleArray(imgs).forEach(img => gallery.appendChild(img));
 
 /* ----------- */
 /* -- Modals -- */
