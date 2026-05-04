@@ -33,6 +33,7 @@ async function loadGallery() {
         img.src = `${CDN}/${key}`;
         gallery.appendChild(img);
     }
+    shuffleArray(Array.from(gallery.children)).forEach(img => gallery.appendChild(img));
 }
 
 function shuffleArray(arr) {
@@ -44,11 +45,6 @@ function shuffleArray(arr) {
 }  
 
 loadGallery();
-
-// Shuffle images within the gallery
-const gallery = document.getElementById('gallery');
-const imgs = Array.from(gallery.children);
-shuffleArray(imgs).forEach(img => gallery.appendChild(img));
 
 /* ----------- */
 /* -- Modals -- */
