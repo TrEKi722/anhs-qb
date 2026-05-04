@@ -193,11 +193,16 @@ async function uploadFile() {
       body: formData,
     });
 
-    const data = await res.json();
-    if (!res.ok) {
-      resultEl.textContent = 'Error: ' + (data.error || res.statusText);
+    const text = await res.text();
+    let data;
+    try { data = JSON.parse(text); } catch { data = null; }
+
+    if (!res.ok || !data) {
+      resultEl.textContent = `Error ${res.status}: ` + (data?.error || res.statusText || text.slice(0, 200));
     } else {
-      resultEl.textContent = 'Uploaded successfully:\n' + JSON.stringify(data, null, 2);
+      showToast('Uploaded successfully!');
+      uploadModal.style.display = 'none';
+      resultEl.textContent = '';
     }
   } catch (err) {
     resultEl.textContent = 'Request failed: ' + err.message;
