@@ -2,8 +2,9 @@
 /* ---- Initialization ---- */
 /* ------------------------ */
 
-document.addEventListener("DOMContentLoaded", (event) => {
-    if (!!(supabaseC.auth.getSession().session)) {
+document.addEventListener("DOMContentLoaded", async (event) => {
+    const { data } = await supabaseC.auth.getSession();
+    if (data.session) {
         authenticated = true;
         document.getElementById("login-btn-container").style.display = "none";
         document.getElementById("actions-container").style.display = "flex";
