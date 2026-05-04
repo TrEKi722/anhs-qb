@@ -3,8 +3,7 @@
 /* ------------------------ */
 
 document.addEventListener("DOMContentLoaded", (event) => {
-    const data = supabaseC.auth.getSession();
-    if (!!data.session) {
+    if (!!(supabaseC.auth.getSession().session)) {
         authenticated = true;
         document.getElementById("login-btn-container").style.display = "none";
         document.getElementById("actions-container").style.display = "flex";
