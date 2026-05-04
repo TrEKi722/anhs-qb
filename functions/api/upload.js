@@ -30,7 +30,7 @@ export async function onRequestPost(context) {
   }
 
   const key = `qb/${folder}/${file.name}`;
-  await env.R2.put(key, file.stream(), {
+  await env.R2.put(key, await file.arrayBuffer(), {
     httpMetadata: { contentType: file.type },
   });
 
