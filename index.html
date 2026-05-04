@@ -50,6 +50,20 @@
             </form>
         </div>
     </div>
+    <div class="modal" id="upload-modal">
+        <div class="modal-content">
+            <span class="close" id="upload-close">&times;</span>
+            <h2>Upload Quote</h2>
+            <form id="upload-form" onsubmit="">
+                <input type="file" name="file" id="file-input">
+                <select name="Folder" id="folder">
+                    <option></option>
+                </select>
+                <input type="submit" value="Upload">
+            </form>
+            <pre id="result"></pre>
+        </div>
+    </div>
 
     <div id="toast">Message goes here</div>
 
