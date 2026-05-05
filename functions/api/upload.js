@@ -7,10 +7,12 @@ export async function onRequestPost(context) {
       return Response.json({ error: 'Unauthorized.' }, { status: 401 });
     }
 
-    const authRes = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, {
+    const supabaseUrl = env.SUPABASE_URL ?? "https://pdvxvgcigowwnfqpjjni.supabase.co";
+    const supabaseKey = env.SUPABASE_ANON_KEY ?? "sb_publishable_CjflF9tunFsNyONxBlHazw_6E2metQ-";
+    const authRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
       headers: {
         'Authorization': `Bearer ${token}`,
-        'apikey': env.SUPABASE_ANON_KEY,
+        'apikey': supabaseKey,
       },
     });
     if (!authRes.ok) {
