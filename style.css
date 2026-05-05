@@ -4,6 +4,13 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap');
 
+@font-face {
+    font-family: 'Sigher';
+    src: url('media/Sigher.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body { 
     margin: 0; background: #111;
     font-family: 'Tektur', sans-serif;
@@ -186,4 +193,72 @@ p {
     .modal-content {
         width: 80vw;
     }
+}
+
+/* ---------------------------- */
+/* -- Create Modal (wider) ----- */
+/* ---------------------------- */
+
+#create-modal .modal-content {
+    width: 60vw;
+}
+
+@media (max-width: 600px) {
+    #create-modal .modal-content {
+        width: 90vw;
+    }
+}
+
+/* ---------------------------- */
+/* --- Template Selector ------- */
+/* ---------------------------- */
+
+.template-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.template-option {
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 3px solid transparent;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    display: block;
+}
+
+.template-option input[type="radio"] {
+    display: none;
+}
+
+.template-option img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    background: #444;
+}
+
+.template-option:has(input:checked) {
+    border-color: #00857D;
+    box-shadow: 0 0 0 2px #00857D;
+}
+
+.template-option:hover:not(:has(input:checked)) {
+    border-color: #555;
+}
+
+#create-submit-btn {
+    font-family: 'Tektur', sans-serif;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    background: #00857D;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    cursor: pointer;
+    margin-top: 0.75rem;
+    display: block;
 }
