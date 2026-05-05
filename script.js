@@ -293,7 +293,7 @@ function wrapLines(ctx, text, maxW) {
 }
 
 function drawCenteredText(ctx, text, zone) {
-    ctx.font = `${zone.weight} ${zone.size}px Tektur`;
+    ctx.font = `${zone.weight} ${zone.size}px Sigher`;
     ctx.fillStyle = zone.color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
