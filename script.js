@@ -27,6 +27,7 @@ async function loadGallery() {
     const res = await fetch(`${WORKER}/list?prefix=${PREFIX}`);
     const keys = await res.json();
     const gallery = document.getElementById("gallery");
+    gallery.innerHTML = '';
 
     for (const key of keys) {
         const img = document.createElement("img");
@@ -76,12 +77,27 @@ uploadSpan.onclick = function() {
     uploadModal.style.display = "none";
 }
 
+var createModal = document.getElementById("create-modal");
+var createButton = document.getElementById("create-quote-btn");
+var createSpan = document.getElementById("create-close");
+
+createButton.onclick = function() {
+    createModal.style.display = "flex";
+}
+
+createSpan.onclick = function() {
+    createModal.style.display = "none";
+}
+
 window.onclick = function(event) {
     if (event.target == uploadModal) {
         uploadModal.style.display = "none";
-    }    
+    }
     if (event.target == acntModal) {
         acntModal.style.display = "none";
+    }
+    if (event.target == createModal) {
+        createModal.style.display = "none";
     }
 }
 
@@ -207,6 +223,178 @@ async function uploadFile() {
   } catch (err) {
     resultEl.textContent = 'Request failed: ' + err.message;
   }
+};
+
+/* ------------- */
+/* --- Create -- */
+/* ------------- */
+
+// Pixel coordinates are relative to each template's natural image size.
+// photo zone: { cx, cy } is the center of the photo area; w/h are its dimensions; angle is degrees.
+// quote/attribution: { cx, cy } is the center of the text block; maxW caps line width.
+// All coordinates need calibration once the real template files exist.
+const TEMPLATES = {
+    "1": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: -18 },
+        quote:       { cx: 775, cy: 492, maxW: 1184, size: 60, weight: "normal",   color: "white" },
+        attribution: { cx: 1114, cy: 918, maxW: 632, size: 35, weight: "normal", color: "white" },
+    },
+    "2": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 20 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+    "3": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 14 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+    "4": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: -26 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+    "5": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 14 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+    "6": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 20 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+};
+
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+function wrapLines(ctx, text, maxW) {
+    const words = text.split(' ');
+    const lines = [];
+    let line = '';
+    for (const word of words) {
+        const test = line ? line + ' ' + word : word;
+        if (ctx.measureText(test).width > maxW && line) {
+            lines.push(line);
+            line = word;
+        } else {
+            line = test;
+        }
+    }
+    if (line) lines.push(line);
+    return lines;
+}
+
+function drawCenteredText(ctx, text, zone) {
+    ctx.font = `${zone.weight} ${zone.size}px Tektur`;
+    ctx.fillStyle = zone.color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const lineH = zone.size * 1.3;
+    const lines = wrapLines(ctx, text, zone.maxW);
+    const totalH = lines.length * lineH;
+    let y = zone.cy - totalH / 2 + lineH / 2;
+    for (const line of lines) {
+        ctx.fillText(line, zone.cx, y);
+        y += lineH;
+    }
+}
+
+// Show/hide photo input based on whether the selected template needs one.
+document.querySelectorAll('input[name="template"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+        const needsPhoto = !!TEMPLATES[radio.value]?.photo;
+        document.getElementById('photo-section').style.display = needsPhoto ? '' : 'none';
+    });
+});
+
+document.getElementById('create-submit-btn').onclick = async function () {
+    const templateNum = document.querySelector('input[name="template"]:checked')?.value;
+    const quoteText = document.getElementById('quote-input').value.trim();
+    const attributionText = document.getElementById('attribution-input').value.trim();
+    const photoFile = document.getElementById('photo-input').files[0];
+
+    if (!templateNum) return showToast('Please select a template.');
+    if (!quoteText) return showToast('Please enter a quote.');
+    if (!attributionText) return showToast('Please enter an attribution.');
+
+    const t = TEMPLATES[templateNum];
+    if (t.photo && !photoFile) return showToast('This template requires a photo.');
+
+    const folder = new URLSearchParams(window.location.search).get('folder');
+    if (!folder) return showToast('No folder in URL.');
+
+    const { data: sessionData } = await supabaseC.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) return showToast('You must be logged in.');
+
+    showToast('Creating quote...');
+
+    try {
+        const templateImg = await loadImage(`media/templates/${templateNum}.png`);
+        const canvas = document.createElement('canvas');
+        canvas.width = templateImg.naturalWidth;
+        canvas.height = templateImg.naturalHeight;
+        const ctx = canvas.getContext('2d');
+
+        // 1. draw template as base
+        ctx.drawImage(templateImg, 0, 0);
+
+        // 2. draw user photo on top, clipped and rotated into its zone
+        if (t.photo && photoFile) {
+            const photoImg = await loadImage(URL.createObjectURL(photoFile));
+            const z = t.photo;
+            ctx.save();
+            ctx.translate(z.cx, z.cy);
+            ctx.rotate(z.angle * Math.PI / 180);
+            ctx.beginPath();
+            ctx.rect(-z.w / 2, -z.h / 2, z.w, z.h);
+            ctx.clip();
+            const scale = Math.max(z.w / photoImg.naturalWidth, z.h / photoImg.naturalHeight);
+            const sw = photoImg.naturalWidth * scale;
+            const sh = photoImg.naturalHeight * scale;
+            ctx.drawImage(photoImg, -sw / 2, -sh / 2, sw, sh);
+            ctx.restore();
+        }
+
+        // 3. draw text
+        await document.fonts.ready;
+        drawCenteredText(ctx, quoteText, t.quote);
+        drawCenteredText(ctx, `- ${attributionText}`, t.attribution);
+
+        // 4. export as PNG and upload
+        canvas.toBlob(async (blob) => {
+            const formData = new FormData();
+            formData.append('file', blob, `quote-${Date.now()}.png`);
+            formData.append('folder', folder);
+
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` },
+                body: formData,
+            });
+
+            const data = await res.json().catch(() => null);
+            if (!res.ok || !data) {
+                showToast('Upload failed.');
+            } else {
+                showToast('Quote created!');
+                createModal.style.display = 'none';
+                loadGallery();
+            }
+        }, 'image/png');
+
+    } catch (err) {
+        showToast('Something went wrong.');
+        console.error(err);
+    }
 };
 
 /* ------------- */

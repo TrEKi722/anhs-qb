@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <div class="floating" id="actions-container" style="display:none;">
         <button id="download-quote-btn" onclick="window.location.href=`https://explorer.cdn.ekinney.com/qb/${new URLSearchParams(window.location.search).get('folder')}`;">
             <img src="media/downloadB.svg" alt="Downloads">
@@ -18,15 +19,19 @@
             <img src="media/createB.svg" alt="Create Quote">
         </button>
     </div>
+
     <div class="floating" id="login-btn-container">
         <button id="login-btn">
             <img src="media/loginB.svg" alt="Login">
         </button>
     </div>
+
     <div class="nav" id="nav">
 
     </div>
+
     <div id="gallery"></div>
+
     <div class="modal" id="acnt-modal">
         <div class="modal-content">
             <span class="close" id="acnt-close">&times;</span>
@@ -42,6 +47,8 @@
             <form id="signup-form" style="display:none;" onsubmit="signup(document.getElementById('signup-email').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value, document.getElementById('signup-code').value); return false;">
                 <label for="signup-email">Email</label><br>
                 <input type="text" id="signup-email" name="signup-email" placeholder="example@example.com"><br>
+                <label for="display-name">Display Name</label><br>
+                <input type="" id="display-name" name="display-name" placeholder="Display Name"><br>
                 <label for="signup-password">Password</label><br>
                 <input type="password" id="signup-password" name="signup-password" placeholder="Password"><br>
                 <label for="signup-confirm-password">Confirm Password</label><br>
@@ -53,6 +60,7 @@
             </form>
         </div>
     </div>
+
     <div class="modal" id="upload-modal">
         <div class="modal-content">
             <span class="close" id="upload-close">&times;</span>
@@ -63,6 +71,49 @@
                 <input type="submit" value="Upload">
             </form>
             <pre id="result"></pre>
+        </div>
+    </div>
+
+    <div class="modal" id="create-modal">
+        <div class="modal-content">
+            <span class="close" id="create-close">&times;</span>
+            <h2>Create Quote</h2>
+            <p>Choose a template:</p>
+            <div class="template-grid">
+                <label class="template-option">
+                    <input type="radio" name="template" value="1">
+                    <img src="media/templates/1.png" alt="Template 1">
+                </label>
+                <label class="template-option">
+                    <input type="radio" name="template" value="2">
+                    <img src="media/templates/2.png" alt="Template 2">
+                </label>
+                <label class="template-option">
+                    <input type="radio" name="template" value="3">
+                    <img src="media/templates/3.png" alt="Template 3">
+                </label>
+                <label class="template-option">
+                    <input type="radio" name="template" value="4">
+                    <img src="media/templates/4.png" alt="Template 4">
+                </label>
+                <label class="template-option">
+                    <input type="radio" name="template" value="5">
+                    <img src="media/templates/5.png" alt="Template 5">
+                </label>
+                <label class="template-option">
+                    <input type="radio" name="template" value="6">
+                    <img src="media/templates/6.png" alt="Template 6">
+                </label>
+            </div>
+            <div id="photo-section">
+                <p>Upload the <strong>photo</strong>:</p>
+                <input type="file" accept="image/*" name="photo-input" id="photo-input">
+            </div>
+            <p>Enter the <strong>quote</strong>:</p>
+            <input type="text" name="quote-input" id="quote-input">
+            <p>Enter the <strong>attribution</strong>:</p>
+            <input type="text" name="attribution-input" id="attribution-input">
+            <button id="create-submit-btn" type="button">✨ Create ✨</button>
         </div>
     </div>
 
