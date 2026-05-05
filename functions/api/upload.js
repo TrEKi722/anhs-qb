@@ -30,9 +30,13 @@ export async function onRequestPost(context) {
   }
 
   const key = `qb/${folder}/${file.name}`;
-  await env.R2.put(key, await file.arrayBuffer(), {
-    httpMetadata: { contentType: file.type },
-  });
+  try {
+    await env.R2.put(key, await file.arrayBuffer(), {
+      httpMetadata: { contentType: file.type },
+    });
+  } catch (err) {
+    return Response.json({ error: err.message }, { status: 500 });
+  }
 
   return Response.json({ success: true, key }, { status: 200 });
 }
