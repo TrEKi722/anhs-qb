@@ -51,54 +51,21 @@ loadGallery();
 /* -- Modals -- */
 /* ------------ */
 
-var acntModal = document.getElementById("acnt-modal");
-var loginBtn = document.getElementById("login-btn");
-var acntSpan = document.getElementsByClassName("close")[0];
-
-loginBtn.onclick = function() {
-    acntModal.style.display = "flex";
+function wireModal(modalId, openId, closeId) {
+    const modal = document.getElementById(modalId);
+    document.getElementById(openId).onclick = () => modal.style.display = 'flex';
+    document.getElementById(closeId).onclick = () => modal.style.display = 'none';
+    return modal;
 }
 
-acntSpan.onclick = function() {
-    acntModal.style.display = "none";
-}
+var acntModal   = wireModal('acnt-modal',   'login-btn',        'acnt-close');
+var uploadModal = wireModal('upload-modal', 'upload-quote-btn', 'upload-close');
+var createModal = wireModal('create-modal', 'create-quote-btn', 'create-close');
 
 window.onclick = function(event) {
-}
-var uploadModal = document.getElementById("upload-modal");
-var uploadButton = document.getElementById("upload-quote-btn");
-var uploadSpan = document.getElementsByClassName("close")[1];
-
-uploadButton.onclick = function() {
-    uploadModal.style.display = "flex";
-}
-
-uploadSpan.onclick = function() {
-    uploadModal.style.display = "none";
-}
-
-var createModal = document.getElementById("create-modal");
-var createButton = document.getElementById("create-quote-btn");
-var createSpan = document.getElementById("create-close");
-
-createButton.onclick = function() {
-    createModal.style.display = "flex";
-}
-
-createSpan.onclick = function() {
-    createModal.style.display = "none";
-}
-
-window.onclick = function(event) {
-    if (event.target == uploadModal) {
-        uploadModal.style.display = "none";
-    }
-    if (event.target == acntModal) {
-        acntModal.style.display = "none";
-    }
-    if (event.target == createModal) {
-        createModal.style.display = "none";
-    }
+    [acntModal, uploadModal, createModal].forEach(m => {
+        if (event.target === m) m.style.display = 'none';
+    });
 }
 
 /* ------------ */
@@ -188,51 +155,49 @@ async function logout() {
 const form = document.getElementById('upload-form');
 const resultEl = document.getElementById('result');
 
-async function uploadFile() {
-  const file = document.getElementById('file-input').files[0];
-  const folder = new URLSearchParams(window.location.search).get('folder');
-  if (!file) return showToast('Please choose a file.');
-  if (!folder) return showToast('No folder in URL.');
-
-  const { data: sessionData } = await supabaseC.auth.getSession();
-  const token = sessionData?.session?.access_token;
-  if (!token) return showToast('You must be logged in to upload.');
-
-  const formData = new FormData();
-  formData.append('file', file);
-  formData.append('folder', folder);
-
-  try {
+async function postToUploadApi(fileOrBlob, filename, folder, token) {
+    const formData = new FormData();
+    formData.append('file', fileOrBlob, filename);
+    formData.append('folder', folder);
     const res = await fetch('/api/upload', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${token}` },
-      body: formData,
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
     });
-
     const text = await res.text();
     let data;
     try { data = JSON.parse(text); } catch { data = null; }
+    return { ok: res.ok, status: res.status, data, text };
+}
 
-    if (!res.ok || !data) {
-      resultEl.textContent = `Error ${res.status}: ` + (data?.error || res.statusText || text.slice(0, 200));
-    } else {
-      showToast('Uploaded successfully!');
-      uploadModal.style.display = 'none';
-      resultEl.textContent = '';
+async function uploadFile() {
+    const file = document.getElementById('file-input').files[0];
+    const folder = new URLSearchParams(window.location.search).get('folder');
+    if (!file) return showToast('Please choose a file.');
+    if (!folder) return showToast('No folder in URL.');
+
+    const { data: sessionData } = await supabaseC.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) return showToast('You must be logged in to upload.');
+
+    try {
+        const { ok, status, data, text } = await postToUploadApi(file, file.name, folder, token);
+        if (!ok || !data) {
+            resultEl.textContent = `Error ${status}: ` + (data?.error || text.slice(0, 200));
+        } else {
+            showToast('Uploaded successfully!');
+            uploadModal.style.display = 'none';
+            resultEl.textContent = '';
+        }
+    } catch (err) {
+        resultEl.textContent = 'Request failed: ' + err.message;
     }
-  } catch (err) {
-    resultEl.textContent = 'Request failed: ' + err.message;
-  }
-};
+}
 
 /* ------------- */
 /* --- Create -- */
 /* ------------- */
 
-// Pixel coordinates are relative to each template's natural image size.
-// photo zone: { cx, cy } is the center of the photo area; w/h are its dimensions; angle is degrees.
-// quote/attribution: { cx, cy } is the center of the text block; maxW caps line width.
-// All coordinates need calibration once the real template files exist.
 const TEMPLATES = {
     "1": {
         photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: -18 },
@@ -307,7 +272,6 @@ function drawCenteredText(ctx, text, zone) {
     }
 }
 
-// Show/hide photo input based on whether the selected template needs one.
 document.querySelectorAll('input[name="template"]').forEach(radio => {
     radio.addEventListener('change', () => {
         const needsPhoto = !!TEMPLATES[radio.value]?.photo;
@@ -338,18 +302,21 @@ document.getElementById('create-submit-btn').onclick = async function () {
     showToast('Creating quote...');
 
     try {
-        const templateImg = await loadImage(`media/templates/${templateNum}.png`);
+        const objectUrl = photoFile ? URL.createObjectURL(photoFile) : null;
+        const [templateImg, photoImg] = await Promise.all([
+            loadImage(`media/templates/${templateNum}.png`),
+            objectUrl ? loadImage(objectUrl) : Promise.resolve(null),
+        ]);
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+
         const canvas = document.createElement('canvas');
         canvas.width = templateImg.naturalWidth;
         canvas.height = templateImg.naturalHeight;
         const ctx = canvas.getContext('2d');
 
-        // 1. draw template as base
         ctx.drawImage(templateImg, 0, 0);
 
-        // 2. draw user photo on top, clipped and rotated into its zone
-        if (t.photo && photoFile) {
-            const photoImg = await loadImage(URL.createObjectURL(photoFile));
+        if (t.photo && photoImg) {
             const z = t.photo;
             ctx.save();
             ctx.translate(z.cx, z.cy);
@@ -364,32 +331,22 @@ document.getElementById('create-submit-btn').onclick = async function () {
             ctx.restore();
         }
 
-        // 3. draw text
         await document.fonts.ready;
         drawCenteredText(ctx, quoteText, t.quote);
         drawCenteredText(ctx, `- ${attributionText}`, t.attribution);
 
-        // 4. export as PNG and upload
-        canvas.toBlob(async (blob) => {
-            const formData = new FormData();
-            formData.append('file', blob, `quote-${Date.now()}.png`);
-            formData.append('folder', folder);
+        const blob = await new Promise((resolve, reject) =>
+            canvas.toBlob(b => b ? resolve(b) : reject(new Error('Failed to generate image')), 'image/png')
+        );
 
-            const res = await fetch('/api/upload', {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` },
-                body: formData,
-            });
-
-            const data = await res.json().catch(() => null);
-            if (!res.ok || !data) {
-                showToast('Upload failed.');
-            } else {
-                showToast('Quote created!');
-                createModal.style.display = 'none';
-                loadGallery();
-            }
-        }, 'image/png');
+        const { ok } = await postToUploadApi(blob, `quote-${Date.now()}.png`, folder, token);
+        if (!ok) {
+            showToast('Upload failed.');
+        } else {
+            showToast('Quote created!');
+            createModal.style.display = 'none';
+            loadGallery();
+        }
 
     } catch (err) {
         showToast('Something went wrong.');
