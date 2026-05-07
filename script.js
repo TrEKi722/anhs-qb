@@ -200,35 +200,155 @@ async function uploadFile() {
 
 const TEMPLATES = {
     "1": {
-        photo:       { cx: 460, cy: 1380, w: 530, h: 640, angle: -18 },
-        quote:       { cx: 775, cy: 492, maxW: 1184, size: 60, weight: "normal",   color: "white" },
-        attribution: { cx: 1114, cy: 918, maxW: 632, size: 35, weight: "normal", color: "white" },
+      "photo": {
+        "cx": 450,
+        "cy": 1378,
+        "w": 581,
+        "h": 697,
+        "angle": -18.2
+      },
+      "quote": {
+        "cx": 775,
+        "cy": 515,
+        "maxW": 1170,
+        "size": 56,
+        "weight": "normal",
+        "color": "white"
+      },
+      "attribution": {
+        "cx": 1091,
+        "cy": 910,
+        "maxW": 632,
+        "size": 65,
+        "weight": "normal",
+        "color": "white"
+      }
     },
     "2": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 20 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+      "photo": {
+        "cx": 1142,
+        "cy": 1462,
+        "w": 537,
+        "h": 648,
+        "angle": 20.4
+      },
+      "quote": {
+        "cx": 771,
+        "cy": 534,
+        "maxW": 1170,
+        "size": 56,
+        "weight": "normal",
+        "color": "white"
+      },
+      "attribution": {
+        "cx": 1092,
+        "cy": 911,
+        "maxW": 630,
+        "size": 65,
+        "weight": "normal",
+        "color": "white"
+      }
     },
     "3": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 14 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+      "photo": {
+        "cx": 437,
+        "cy": 493,
+        "w": 539,
+        "h": 643,
+        "angle": 15
+      },
+      "quote": {
+        "cx": 771,
+        "cy": 1448,
+        "maxW": 1170,
+        "size": 56,
+        "weight": "normal",
+        "color": "white"
+      },
+      "attribution": {
+        "cx": 1091,
+        "cy": 1828,
+        "maxW": 630,
+        "size": 65,
+        "weight": "normal",
+        "color": "white"
+      }
     },
     "4": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: -26 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+      "photo": {
+        "cx": 1044,
+        "cy": 428,
+        "w": 530,
+        "h": 645,
+        "angle": -26.5
+      },
+      "quote": {
+        "cx": 771,
+        "cy": 1439,
+        "maxW": 1170,
+        "size": 56,
+        "weight": "normal",
+        "color": "white"
+      },
+      "attribution": {
+        "cx": 1092,
+        "cy": 1829,
+        "maxW": 630,
+        "size": 65,
+        "weight": "normal",
+        "color": "white"
+      }
     },
     "5": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 14 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+      "photo": {
+        "cx": 401,
+        "cy": 445,
+        "w": 535,
+        "h": 645,
+        "angle": 14.6
+      },
+      "quote": {
+        "cx": 836,
+        "cy": 1175,
+        "maxW": 1170,
+        "size": 56,
+        "weight": "normal",
+        "color": "white"
+      },
+      "attribution": {
+        "cx": 1155,
+        "cy": 1552,
+        "maxW": 630,
+        "size": 65,
+        "weight": "normal",
+        "color": "white"
+      }
     },
     "6": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 20 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal",   color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
-    },
+      "photo": {
+        "cx": 1158,
+        "cy": 1447,
+        "w": 535,
+        "h": 645,
+        "angle": 20.6
+      },
+      "quote": {
+        "cx": 693,
+        "cy": 795,
+        "maxW": 1170,
+        "size": 56,
+        "weight": "normal",
+        "color": "white"
+      },
+      "attribution": {
+        "cx": 335,
+        "cy": 1100,
+        "maxW": 630,
+        "size": 65,
+        "weight": "normal",
+        "color": "white"
+      }
+    }
 };
 
 function loadImage(src) {
