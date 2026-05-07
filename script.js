@@ -200,7 +200,7 @@ async function uploadFile() {
 
 const TEMPLATES = {
     "1": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: -18 },
+        photo:       { cx: 460, cy: 1380, w: 530, h: 640, angle: -18 },
         quote:       { cx: 775, cy: 492, maxW: 1184, size: 60, weight: "normal",   color: "white" },
         attribution: { cx: 1114, cy: 918, maxW: 632, size: 35, weight: "normal", color: "white" },
     },
@@ -331,7 +331,7 @@ document.getElementById('create-submit-btn').onclick = async function () {
             ctx.restore();
         }
 
-        await document.fonts.ready;
+        await document.fonts.load(`${t.quote.size}px Sigher`);
         drawCenteredText(ctx, quoteText, t.quote);
         drawCenteredText(ctx, `- ${attributionText}`, t.attribution);
 
