@@ -57,6 +57,7 @@ p {
     grid-template-columns: repeat(auto-fill, minmax(425px, 1fr));
     gap: 2rem;
     padding: 3rem;
+    padding-top: 4.5rem;
 }
 
 #gallery img {
@@ -280,7 +281,6 @@ nav {
 
 nav a {
     text-decoration: none;
-    color: var(--text-color);
     font-weight: 600;
     padding: 0.5rem 1rem;
     border-radius: 8px;
