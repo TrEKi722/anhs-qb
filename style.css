@@ -261,3 +261,33 @@ p {
     margin-top: 0.75rem;
     display: block;
 }
+
+/* Navigation */
+nav {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--card-border);
+    padding: 1rem 0;
+    justify-content: center;
+    gap: 1.5rem;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+    width: 100vw;
+    display: flex;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+nav a:hover, nav a.active {
+    background: var(--primary);
+    color: white;
+}
