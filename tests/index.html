@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Builder — Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Sigher';
+            src: url('../media/Sigher.otf') format('opentype');
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #111;
+            color: #eee;
+            font-family: 'Tektur', sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ---- Left panel ---- */
+
+        #panel {
+            width: 340px;
+            flex-shrink: 0;
+            overflow-y: auto;
+            padding: 1.25rem;
+            background: #1a1a1a;
+            border-right: 1px solid #2a2a2a;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        h1 { font-size: 1.1rem; color: #00857D; letter-spacing: 0.03em; }
+
+        .section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #555;
+            border-bottom: 1px solid #222;
+            padding-bottom: 0.35rem;
+            margin-bottom: 0.6rem;
+        }
+
+        section { display: flex; flex-direction: column; gap: 0.5rem; }
+
+        .field-label {
+            font-size: 0.78rem;
+            color: #888;
+            margin-bottom: 0.2rem;
+            display: block;
+        }
+
+        /* ---- Template tabs ---- */
+
+        .template-tabs {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .template-tab {
+            flex: 1;
+            padding: 0.35rem 0;
+            background: #2a2a2a;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            color: #bbb;
+            cursor: pointer;
+            font-family: 'Tektur', sans-serif;
+            font-size: 0.9rem;
+            text-align: center;
+            transition: border-color 0.12s, background 0.12s;
+        }
+
+        .template-tab.active {
+            border-color: #00857D;
+            background: #1c3533;
+            color: #fff;
+        }
+
+        /* ---- Text inputs ---- */
+
+        input[type="text"] {
+            width: 100%;
+            background: #252525;
+            border: 1px solid #383838;
+            border-radius: 6px;
+            color: #eee;
+            padding: 0.45rem 0.65rem;
+            font-size: 0.88rem;
+            font-family: 'Tektur', sans-serif;
+        }
+
+        input[type="file"] {
+            color: #888;
+            font-size: 0.82rem;
+            width: 100%;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #00857D;
+        }
+
+        /* ---- Sliders ---- */
+
+        .slider-row {
+            display: grid;
+            grid-template-columns: 48px 1fr 64px;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .slider-key {
+            font-size: 0.78rem;
+            color: #888;
+            font-family: monospace;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #00857D;
+            cursor: pointer;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            background: #252525;
+            border: 1px solid #383838;
+            border-radius: 4px;
+            color: #eee;
+            padding: 0.2rem 0.35rem;
+            font-size: 0.8rem;
+            font-family: monospace;
+            text-align: right;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #00857D;
+        }
+
+        /* ---- JSON panel ---- */
+
+        #json-output {
+            width: 100%;
+            height: 200px;
+            background: #0d0d0d;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            color: #5fb8b8;
+            font-family: monospace;
+            font-size: 0.68rem;
+            padding: 0.6rem;
+            resize: none;
+            line-height: 1.4;
+        }
+
+        #copy-btn {
+            width: 100%;
+            padding: 0.5rem;
+            background: #00857D;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-family: 'Tektur', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.1s;
+            margin-top: 0.4rem;
+        }
+
+        #copy-btn:hover { background: #009b92; }
+        #copy-btn:active { background: #006b64; }
+        #copy-btn.copied { background: #2d6b29; }
+
+        /* ---- Right panel / canvas ---- */
+
+        #preview {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 2rem;
+            gap: 0.75rem;
+        }
+
+        #canvas {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 32px rgba(0,0,0,0.6);
+        }
+
+        #preview-hint {
+            color: #444;
+            font-size: 0.78rem;
+        }
+    </style>
+</head>
+<body>
+
+<div id="panel">
+    <h1>Quote Builder Test</h1>
+
+    <section>
+        <div class="section-title">Template</div>
+        <div class="template-tabs">
+            <button class="template-tab active" data-t="1">1</button>
+            <button class="template-tab" data-t="2">2</button>
+            <button class="template-tab" data-t="3">3</button>
+            <button class="template-tab" data-t="4">4</button>
+            <button class="template-tab" data-t="5">5</button>
+            <button class="template-tab" data-t="6">6</button>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-title">Content</div>
+        <div>
+            <span class="field-label">Quote</span>
+            <input type="text" id="quote-input" placeholder="Enter quote text">
+        </div>
+        <div>
+            <span class="field-label">Attribution</span>
+            <input type="text" id="attribution-input" placeholder="Enter attribution">
+        </div>
+        <div>
+            <span class="field-label">Photo</span>
+            <input type="file" id="photo-input" accept="image/*">
+        </div>
+    </section>
+
+    <section>
+        <div class="section-title">Photo Placement</div>
+        <div id="sliders"></div>
+    </section>
+
+    <section>
+        <div class="section-title">Templates JSON</div>
+        <textarea id="json-output" readonly spellcheck="false"></textarea>
+        <button id="copy-btn">Copy JSON</button>
+    </section>
+</div>
+
+<div id="preview">
+    <canvas id="canvas"></canvas>
+    <p id="preview-hint">Live preview</p>
+</div>
+
+<script>
+const TEMPLATES = {
+    "1": {
+        photo:       { cx: 460, cy: 1380, w: 530, h: 640, angle: -18 },
+        quote:       { cx: 775,  cy: 492,  maxW: 1184, size: 60, weight: "normal", color: "white" },
+        attribution: { cx: 1114, cy: 918,  maxW: 632,  size: 35, weight: "normal", color: "white" },
+    },
+    "2": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 20 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+    "3": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 14 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+    "4": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: -26 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+    "5": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 14 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+    "6": {
+        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 20 },
+        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
+        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
+    },
+};
+
+const PHOTO_FIELDS = [
+    { key: 'cx',    min: 0,    max: 2000, step: 1   },
+    { key: 'cy',    min: 0,    max: 2000, step: 1   },
+    { key: 'w',     min: 50,   max: 1500, step: 1   },
+    { key: 'h',     min: 50,   max: 1500, step: 1   },
+    { key: 'angle', min: -180, max: 180,  step: 0.5 },
+];
+
+let currentTemplate = "1";
+let photoImg = null;
+const templateImgCache = {};
+
+// --- Image loading ---
+
+function loadImage(src) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = src;
+    });
+}
+
+async function getTemplateImg(num) {
+    if (!templateImgCache[num]) {
+        templateImgCache[num] = await loadImage(`../media/templates/${num}.png`);
+    }
+    return templateImgCache[num];
+}
+
+// --- Text rendering ---
+
+function wrapLines(ctx, text, maxW) {
+    const words = text.split(' ');
+    const lines = [];
+    let line = '';
+    for (const word of words) {
+        const test = line ? line + ' ' + word : word;
+        if (ctx.measureText(test).width > maxW && line) {
+            lines.push(line);
+            line = word;
+        } else {
+            line = test;
+        }
+    }
+    if (line) lines.push(line);
+    return lines;
+}
+
+function drawCenteredText(ctx, text, zone) {
+    ctx.font = `${zone.weight} ${zone.size}px Sigher`;
+    ctx.fillStyle = zone.color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const lineH = zone.size * 1.3;
+    const lines = wrapLines(ctx, text, zone.maxW);
+    const totalH = lines.length * lineH;
+    let y = zone.cy - totalH / 2 + lineH / 2;
+    for (const line of lines) {
+        ctx.fillText(line, zone.cx, y);
+        y += lineH;
+    }
+}
+
+// --- Canvas render ---
+
+async function render() {
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const t = TEMPLATES[currentTemplate];
+
+    let templateImg;
+    try {
+        templateImg = await getTemplateImg(currentTemplate);
+    } catch {
+        return;
+    }
+
+    canvas.width  = templateImg.naturalWidth;
+    canvas.height = templateImg.naturalHeight;
+    ctx.drawImage(templateImg, 0, 0);
+
+    if (t.photo && photoImg) {
+        const z = t.photo;
+        ctx.save();
+        ctx.translate(z.cx, z.cy);
+        ctx.rotate(z.angle * Math.PI / 180);
+        ctx.beginPath();
+        ctx.rect(-z.w / 2, -z.h / 2, z.w, z.h);
+        ctx.clip();
+        const scale = Math.max(z.w / photoImg.naturalWidth, z.h / photoImg.naturalHeight);
+        const sw = photoImg.naturalWidth  * scale;
+        const sh = photoImg.naturalHeight * scale;
+        ctx.drawImage(photoImg, -sw / 2, -sh / 2, sw, sh);
+        ctx.restore();
+    }
+
+    const quoteText       = document.getElementById('quote-input').value.trim();
+    const attributionText = document.getElementById('attribution-input').value.trim();
+
+    await document.fonts.load(`${t.quote.size}px Sigher`);
+
+    if (quoteText)       drawCenteredText(ctx, quoteText, t.quote);
+    if (attributionText) drawCenteredText(ctx, `- ${attributionText}`, t.attribution);
+}
+
+let renderTimer = null;
+function scheduleRender() {
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(render, 30);
+}
+
+// --- JSON output ---
+
+function updateJSON() {
+    document.getElementById('json-output').value = JSON.stringify(TEMPLATES, null, 2);
+}
+
+// --- Sliders ---
+
+function buildSliders() {
+    const container = document.getElementById('sliders');
+    container.innerHTML = '';
+    const zone = TEMPLATES[currentTemplate].photo;
+
+    for (const field of PHOTO_FIELDS) {
+        const row = document.createElement('div');
+        row.className = 'slider-row';
+
+        const lbl = document.createElement('span');
+        lbl.className = 'slider-key';
+        lbl.textContent = field.key;
+
+        const slider = document.createElement('input');
+        slider.type  = 'range';
+        slider.min   = field.min;
+        slider.max   = field.max;
+        slider.step  = field.step;
+        slider.value = zone[field.key];
+
+        const num = document.createElement('input');
+        num.type  = 'number';
+        num.min   = field.min;
+        num.max   = field.max;
+        num.step  = field.step;
+        num.value = zone[field.key];
+
+        slider.oninput = () => {
+            num.value = slider.value;
+            TEMPLATES[currentTemplate].photo[field.key] = parseFloat(slider.value);
+            updateJSON();
+            scheduleRender();
+        };
+
+        num.oninput = () => {
+            slider.value = num.value;
+            TEMPLATES[currentTemplate].photo[field.key] = parseFloat(num.value);
+            updateJSON();
+            scheduleRender();
+        };
+
+        row.appendChild(lbl);
+        row.appendChild(slider);
+        row.appendChild(num);
+        container.appendChild(row);
+    }
+}
+
+// --- Template switching ---
+
+document.querySelectorAll('.template-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.template-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTemplate = btn.dataset.t;
+        buildSliders();
+        scheduleRender();
+    });
+});
+
+// --- Content inputs ---
+
+document.getElementById('quote-input').addEventListener('input', scheduleRender);
+document.getElementById('attribution-input').addEventListener('input', scheduleRender);
+
+document.getElementById('photo-input').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) { photoImg = null; scheduleRender(); return; }
+    const url = URL.createObjectURL(file);
+    try {
+        photoImg = await loadImage(url);
+    } finally {
+        URL.revokeObjectURL(url);
+    }
+    scheduleRender();
+});
+
+// --- Copy button ---
+
+document.getElementById('copy-btn').addEventListener('click', () => {
+    navigator.clipboard.writeText(document.getElementById('json-output').value).then(() => {
+        const btn = document.getElementById('copy-btn');
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.textContent = 'Copy JSON';
+            btn.classList.remove('copied');
+        }, 1500);
+    });
+});
+
+// --- Init ---
+
+buildSliders();
+updateJSON();
+render();
+</script>
+</body>
+</html>
