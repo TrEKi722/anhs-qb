@@ -210,7 +210,7 @@ const TEMPLATES = {
       "quote": {
         "cx": 775,
         "cy": 515,
-        "maxW": 1170,
+        "maxW": 1130,
         "size": 56,
         "weight": "normal",
         "color": "white"
@@ -235,7 +235,7 @@ const TEMPLATES = {
       "quote": {
         "cx": 771,
         "cy": 534,
-        "maxW": 1170,
+        "maxW": 1130,
         "size": 56,
         "weight": "normal",
         "color": "white"
@@ -243,7 +243,7 @@ const TEMPLATES = {
       "attribution": {
         "cx": 1092,
         "cy": 911,
-        "maxW": 630,
+        "maxW": 625,
         "size": 65,
         "weight": "normal",
         "color": "white"
@@ -260,7 +260,7 @@ const TEMPLATES = {
       "quote": {
         "cx": 771,
         "cy": 1448,
-        "maxW": 1170,
+        "maxW": 1130,
         "size": 56,
         "weight": "normal",
         "color": "white"
@@ -268,7 +268,7 @@ const TEMPLATES = {
       "attribution": {
         "cx": 1091,
         "cy": 1828,
-        "maxW": 630,
+        "maxW": 625,
         "size": 65,
         "weight": "normal",
         "color": "white"
@@ -285,7 +285,7 @@ const TEMPLATES = {
       "quote": {
         "cx": 771,
         "cy": 1439,
-        "maxW": 1170,
+        "maxW": 1130,
         "size": 56,
         "weight": "normal",
         "color": "white"
@@ -293,7 +293,7 @@ const TEMPLATES = {
       "attribution": {
         "cx": 1092,
         "cy": 1829,
-        "maxW": 630,
+        "maxW": 625,
         "size": 65,
         "weight": "normal",
         "color": "white"
@@ -310,7 +310,7 @@ const TEMPLATES = {
       "quote": {
         "cx": 836,
         "cy": 1175,
-        "maxW": 1170,
+        "maxW": 1130,
         "size": 56,
         "weight": "normal",
         "color": "white"
@@ -318,7 +318,7 @@ const TEMPLATES = {
       "attribution": {
         "cx": 1155,
         "cy": 1552,
-        "maxW": 630,
+        "maxW": 625,
         "size": 65,
         "weight": "normal",
         "color": "white"
@@ -335,7 +335,7 @@ const TEMPLATES = {
       "quote": {
         "cx": 693,
         "cy": 795,
-        "maxW": 1170,
+        "maxW": 1130,
         "size": 56,
         "weight": "normal",
         "color": "white"
@@ -343,7 +343,7 @@ const TEMPLATES = {
       "attribution": {
         "cx": 335,
         "cy": 1100,
-        "maxW": 630,
+        "maxW": 625,
         "size": 65,
         "weight": "normal",
         "color": "white"
