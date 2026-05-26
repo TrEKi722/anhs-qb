@@ -43,6 +43,6 @@ const TEMPLATES = {
         layers: ["photo", "text", "template"],
         photo:       { cx: 540,  cy: 675,  w: 1080, h: 1350, angle: 0},
         quote:       { cx: 28,   cy: 838,  maxW: 812,  size: 56, weight: "normal", color: "white", font: "Playfair Display", align: "left"},
-        attribution: { cx: 28,   cy: 1100, maxW: 1072, size: 65, weight: "normal", color: "white", font: "Poppins", align: "left"}
+        attribution: { cx: 28,   cy: 1120, maxW: 1072, size: 65, weight: "normal", color: "white", font: "Poppins", align: "left"}
       }
 };
