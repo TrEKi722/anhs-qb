@@ -267,39 +267,9 @@
     <p id="preview-hint">Live preview</p>
 </div>
 
+<script src="../config.js"></script>
 <script>
-const TEMPLATES = {
-    "1": {
-        photo:       { cx: 460, cy: 1380, w: 530, h: 640, angle: -18 },
-        quote:       { cx: 775,  cy: 492,  maxW: 1184, size: 60, weight: "normal", color: "white" },
-        attribution: { cx: 1114, cy: 918,  maxW: 632,  size: 35, weight: "normal", color: "white" },
-    },
-    "2": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 20 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
-    },
-    "3": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 14 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
-    },
-    "4": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: -26 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
-    },
-    "5": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 14 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
-    },
-    "6": {
-        photo:       { cx: 200, cy: 250, w: 530, h: 640, angle: 20 },
-        quote:       { cx: 465, cy: 600, maxW: 700, size: 52, weight: "normal", color: "white" },
-        attribution: { cx: 465, cy: 780, maxW: 500, size: 32, weight: "normal", color: "white" },
-    },
-};
+/* TEMPLATES and CONFIG loaded from ../config.js */
 
 const PHOTO_FIELDS = [
     { key: 'cx',    min: 0,    max: 2000, step: 1   },
@@ -357,8 +327,8 @@ function wrapLines(ctx, text, maxW) {
     return lines;
 }
 
-function drawCenteredText(ctx, text, zone) {
-    ctx.font = `${zone.weight} ${zone.size}px Sigher`;
+function drawCenteredText(ctx, text, zone, font) {
+    ctx.font = `${zone.weight} ${zone.size}px ${font}`;
     ctx.fillStyle = zone.color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -388,30 +358,36 @@ async function render() {
 
     canvas.width  = templateImg.naturalWidth;
     canvas.height = templateImg.naturalHeight;
-    ctx.drawImage(templateImg, 0, 0);
 
-    if (t.photo && photoImg) {
-        const z = t.photo;
-        ctx.save();
-        ctx.translate(z.cx, z.cy);
-        ctx.rotate(z.angle * Math.PI / 180);
-        ctx.beginPath();
-        ctx.rect(-z.w / 2, -z.h / 2, z.w, z.h);
-        ctx.clip();
-        const scale = Math.max(z.w / photoImg.naturalWidth, z.h / photoImg.naturalHeight);
-        const sw = photoImg.naturalWidth  * scale;
-        const sh = photoImg.naturalHeight * scale;
-        ctx.drawImage(photoImg, -sw / 2, -sh / 2, sw, sh);
-        ctx.restore();
-    }
+    const font   = t.font || CONFIG.font;
+    const layers = t.layers || ["template", "photo", "text"];
 
     const quoteText       = document.getElementById('quote-input').value.trim();
     const attributionText = document.getElementById('attribution-input').value.trim();
 
-    await document.fonts.load(`${t.quote.size}px Sigher`);
+    await document.fonts.load(`${t.quote.size}px ${font}`);
 
-    if (quoteText)       drawCenteredText(ctx, quoteText, t.quote);
-    if (attributionText) drawCenteredText(ctx, `- ${attributionText}`, t.attribution);
+    for (const layer of layers) {
+        if (layer === "template") {
+            ctx.drawImage(templateImg, 0, 0);
+        } else if (layer === "photo" && t.photo && photoImg) {
+            const z = t.photo;
+            ctx.save();
+            ctx.translate(z.cx, z.cy);
+            ctx.rotate(z.angle * Math.PI / 180);
+            ctx.beginPath();
+            ctx.rect(-z.w / 2, -z.h / 2, z.w, z.h);
+            ctx.clip();
+            const scale = Math.max(z.w / photoImg.naturalWidth, z.h / photoImg.naturalHeight);
+            const sw = photoImg.naturalWidth  * scale;
+            const sh = photoImg.naturalHeight * scale;
+            ctx.drawImage(photoImg, -sw / 2, -sh / 2, sw, sh);
+            ctx.restore();
+        } else if (layer === "text") {
+            if (quoteText)       drawCenteredText(ctx, quoteText, t.quote, font);
+            if (attributionText) drawCenteredText(ctx, `- ${attributionText}`, t.attribution, font);
+        }
+    }
 }
 
 let renderTimer = null;

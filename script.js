@@ -198,158 +198,7 @@ async function uploadFile() {
 /* --- Create -- */
 /* ------------- */
 
-const TEMPLATES = {
-    "1": {
-      "photo": {
-        "cx": 450,
-        "cy": 1378,
-        "w": 581,
-        "h": 697,
-        "angle": -18.2
-      },
-      "quote": {
-        "cx": 775,
-        "cy": 515,
-        "maxW": 1130,
-        "size": 56,
-        "weight": "normal",
-        "color": "white"
-      },
-      "attribution": {
-        "cx": 1091,
-        "cy": 910,
-        "maxW": 632,
-        "size": 65,
-        "weight": "normal",
-        "color": "white"
-      }
-    },
-    "2": {
-      "photo": {
-        "cx": 1142,
-        "cy": 1462,
-        "w": 537,
-        "h": 648,
-        "angle": 20.4
-      },
-      "quote": {
-        "cx": 771,
-        "cy": 534,
-        "maxW": 1130,
-        "size": 56,
-        "weight": "normal",
-        "color": "white"
-      },
-      "attribution": {
-        "cx": 1092,
-        "cy": 911,
-        "maxW": 625,
-        "size": 65,
-        "weight": "normal",
-        "color": "white"
-      }
-    },
-    "3": {
-      "photo": {
-        "cx": 437,
-        "cy": 493,
-        "w": 539,
-        "h": 643,
-        "angle": 15
-      },
-      "quote": {
-        "cx": 771,
-        "cy": 1448,
-        "maxW": 1130,
-        "size": 56,
-        "weight": "normal",
-        "color": "white"
-      },
-      "attribution": {
-        "cx": 1091,
-        "cy": 1828,
-        "maxW": 625,
-        "size": 65,
-        "weight": "normal",
-        "color": "white"
-      }
-    },
-    "4": {
-      "photo": {
-        "cx": 1044,
-        "cy": 428,
-        "w": 530,
-        "h": 645,
-        "angle": -26.5
-      },
-      "quote": {
-        "cx": 771,
-        "cy": 1439,
-        "maxW": 1130,
-        "size": 56,
-        "weight": "normal",
-        "color": "white"
-      },
-      "attribution": {
-        "cx": 1092,
-        "cy": 1829,
-        "maxW": 625,
-        "size": 65,
-        "weight": "normal",
-        "color": "white"
-      }
-    },
-    "5": {
-      "photo": {
-        "cx": 401,
-        "cy": 445,
-        "w": 535,
-        "h": 645,
-        "angle": 14.6
-      },
-      "quote": {
-        "cx": 836,
-        "cy": 1175,
-        "maxW": 1130,
-        "size": 56,
-        "weight": "normal",
-        "color": "white"
-      },
-      "attribution": {
-        "cx": 1155,
-        "cy": 1552,
-        "maxW": 625,
-        "size": 65,
-        "weight": "normal",
-        "color": "white"
-      }
-    },
-    "6": {
-      "photo": {
-        "cx": 1158,
-        "cy": 1447,
-        "w": 535,
-        "h": 645,
-        "angle": 20.6
-      },
-      "quote": {
-        "cx": 693,
-        "cy": 795,
-        "maxW": 1130,
-        "size": 56,
-        "weight": "normal",
-        "color": "white"
-      },
-      "attribution": {
-        "cx": 335,
-        "cy": 1100,
-        "maxW": 625,
-        "size": 65,
-        "weight": "normal",
-        "color": "white"
-      }
-    }
-};
+/* TEMPLATES and CONFIG are loaded from config.js */
 
 function loadImage(src) {
     return new Promise((resolve, reject) => {
@@ -377,8 +226,8 @@ function wrapLines(ctx, text, maxW) {
     return lines;
 }
 
-function drawCenteredText(ctx, text, zone) {
-    ctx.font = `${zone.weight} ${zone.size}px Sigher`;
+function drawCenteredText(ctx, text, zone, font) {
+    ctx.font = `${zone.weight} ${zone.size}px ${font}`;
     ctx.fillStyle = zone.color;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
@@ -434,26 +283,32 @@ document.getElementById('create-submit-btn').onclick = async function () {
         canvas.height = templateImg.naturalHeight;
         const ctx = canvas.getContext('2d');
 
-        ctx.drawImage(templateImg, 0, 0);
+        const font = t.font || CONFIG.font;
+        const layers = t.layers || ["template", "photo", "text"];
 
-        if (t.photo && photoImg) {
-            const z = t.photo;
-            ctx.save();
-            ctx.translate(z.cx, z.cy);
-            ctx.rotate(z.angle * Math.PI / 180);
-            ctx.beginPath();
-            ctx.rect(-z.w / 2, -z.h / 2, z.w, z.h);
-            ctx.clip();
-            const scale = Math.max(z.w / photoImg.naturalWidth, z.h / photoImg.naturalHeight);
-            const sw = photoImg.naturalWidth * scale;
-            const sh = photoImg.naturalHeight * scale;
-            ctx.drawImage(photoImg, -sw / 2, -sh / 2, sw, sh);
-            ctx.restore();
+        await document.fonts.load(`${t.quote.size}px ${font}`);
+
+        for (const layer of layers) {
+            if (layer === "template") {
+                ctx.drawImage(templateImg, 0, 0);
+            } else if (layer === "photo" && t.photo && photoImg) {
+                const z = t.photo;
+                ctx.save();
+                ctx.translate(z.cx, z.cy);
+                ctx.rotate(z.angle * Math.PI / 180);
+                ctx.beginPath();
+                ctx.rect(-z.w / 2, -z.h / 2, z.w, z.h);
+                ctx.clip();
+                const scale = Math.max(z.w / photoImg.naturalWidth, z.h / photoImg.naturalHeight);
+                const sw = photoImg.naturalWidth * scale;
+                const sh = photoImg.naturalHeight * scale;
+                ctx.drawImage(photoImg, -sw / 2, -sh / 2, sw, sh);
+                ctx.restore();
+            } else if (layer === "text") {
+                drawCenteredText(ctx, quoteText, t.quote, font);
+                drawCenteredText(ctx, `- ${attributionText}`, t.attribution, font);
+            }
         }
-
-        await document.fonts.load(`${t.quote.size}px Sigher`);
-        drawCenteredText(ctx, quoteText, t.quote);
-        drawCenteredText(ctx, `- ${attributionText}`, t.attribution);
 
         const blob = await new Promise((resolve, reject) =>
             canvas.toBlob(b => b ? resolve(b) : reject(new Error('Failed to generate image')), 'image/png')
