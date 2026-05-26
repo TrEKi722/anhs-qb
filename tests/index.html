@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quote Builder — Test</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
         @font-face {
             font-family: 'Sigher';
@@ -148,6 +147,33 @@
         input[type="number"]:focus {
             outline: none;
             border-color: #00857D;
+        }
+
+        /* ---- Align toggle ---- */
+
+        .align-row {
+            display: flex;
+            gap: 0.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .align-btn {
+            flex: 1;
+            padding: 0.3rem 0;
+            background: #2a2a2a;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            color: #999;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .align-btn.active {
+            border-color: #00857D;
+            color: #fff;
+            background: #1c3533;
         }
 
         /* ---- JSON panel ---- */
@@ -333,7 +359,7 @@ function wrapLines(ctx, text, maxW) {
 function drawCenteredText(ctx, text, zone, font) {
     ctx.font = `${zone.weight} ${zone.size}px ${font}`;
     ctx.fillStyle = zone.color;
-    ctx.textAlign = 'center';
+    ctx.textAlign = zone.align || 'center';
     ctx.textBaseline = 'middle';
     const lineH = zone.size * 1.3;
     const lines = wrapLines(ctx, text, zone.maxW);
@@ -412,7 +438,7 @@ function updateJSON() {
 
 // --- Sliders ---
 
-function buildZoneSliders(containerId, zoneKey, fields) {
+function buildZoneSliders(containerId, zoneKey, fields, hasAlign = false) {
     const container = document.getElementById(containerId);
     container.innerHTML = '';
     const zone = TEMPLATES[currentTemplate][zoneKey];
@@ -458,12 +484,32 @@ function buildZoneSliders(containerId, zoneKey, fields) {
         row.appendChild(num);
         container.appendChild(row);
     }
+
+    if (hasAlign) {
+        const alignRow = document.createElement('div');
+        alignRow.className = 'align-row';
+        const current = zone.align || 'center';
+        for (const val of ['left', 'center', 'right']) {
+            const btn = document.createElement('button');
+            btn.className = 'align-btn' + (val === current ? ' active' : '');
+            btn.textContent = val[0].toUpperCase() + val.slice(1);
+            btn.onclick = () => {
+                alignRow.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                TEMPLATES[currentTemplate][zoneKey].align = val;
+                updateJSON();
+                scheduleRender();
+            };
+            alignRow.appendChild(btn);
+        }
+        container.appendChild(alignRow);
+    }
 }
 
 function buildAllSliders() {
     buildZoneSliders('photo-sliders',       'photo',       PHOTO_FIELDS);
-    buildZoneSliders('quote-sliders',       'quote',       TEXT_FIELDS);
-    buildZoneSliders('attribution-sliders', 'attribution', TEXT_FIELDS);
+    buildZoneSliders('quote-sliders',       'quote',       TEXT_FIELDS, true);
+    buildZoneSliders('attribution-sliders', 'attribution', TEXT_FIELDS, true);
 }
 
 // --- Template switching ---

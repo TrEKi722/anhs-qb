@@ -229,7 +229,7 @@ function wrapLines(ctx, text, maxW) {
 function drawCenteredText(ctx, text, zone, font) {
     ctx.font = `${zone.weight} ${zone.size}px ${font}`;
     ctx.fillStyle = zone.color;
-    ctx.textAlign = 'center';
+    ctx.textAlign = zone.align || 'center';
     ctx.textBaseline = 'middle';
     const lineH = zone.size * 1.3;
     const lines = wrapLines(ctx, text, zone.maxW);
