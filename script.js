@@ -311,7 +311,7 @@ document.getElementById('create-submit-btn').onclick = async function () {
                 ctx.restore();
             } else if (layer === "text") {
                 drawCenteredText(ctx, quoteText, t.quote, quoteFont);
-                drawCenteredText(ctx, `- ${attributionText}`, t.attribution, attrFont);
+                drawCenteredText(ctx, `${attributionText}`, t.attribution, attrFont);
             }
         }
 
