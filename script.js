@@ -283,10 +283,15 @@ document.getElementById('create-submit-btn').onclick = async function () {
         canvas.height = templateImg.naturalHeight;
         const ctx = canvas.getContext('2d');
 
-        const font = t.font || CONFIG.font;
         const layers = t.layers || ["template", "photo", "text"];
+        const resolveFont = zone => zone.font || t.font || CONFIG.font;
+        const quoteFont = resolveFont(t.quote);
+        const attrFont  = resolveFont(t.attribution);
 
-        await document.fonts.load(`${t.quote.size}px ${font}`);
+        await Promise.all([...new Set([
+            `${t.quote.size}px ${quoteFont}`,
+            `${t.attribution.size}px ${attrFont}`,
+        ])].map(f => document.fonts.load(f)));
 
         for (const layer of layers) {
             if (layer === "template") {
@@ -305,8 +310,8 @@ document.getElementById('create-submit-btn').onclick = async function () {
                 ctx.drawImage(photoImg, -sw / 2, -sh / 2, sw, sh);
                 ctx.restore();
             } else if (layer === "text") {
-                drawCenteredText(ctx, quoteText, t.quote, font);
-                drawCenteredText(ctx, `- ${attributionText}`, t.attribution, font);
+                drawCenteredText(ctx, quoteText, t.quote, quoteFont);
+                drawCenteredText(ctx, `- ${attributionText}`, t.attribution, attrFont);
             }
         }
 

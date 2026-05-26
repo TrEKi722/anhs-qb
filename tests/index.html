@@ -359,13 +359,18 @@ async function render() {
     canvas.width  = templateImg.naturalWidth;
     canvas.height = templateImg.naturalHeight;
 
-    const font   = t.font || CONFIG.font;
     const layers = t.layers || ["template", "photo", "text"];
+    const resolveFont = zone => zone.font || t.font || CONFIG.font;
+    const quoteFont = resolveFont(t.quote);
+    const attrFont  = resolveFont(t.attribution);
 
     const quoteText       = document.getElementById('quote-input').value.trim();
     const attributionText = document.getElementById('attribution-input').value.trim();
 
-    await document.fonts.load(`${t.quote.size}px ${font}`);
+    await Promise.all([...new Set([
+        `${t.quote.size}px ${quoteFont}`,
+        `${t.attribution.size}px ${attrFont}`,
+    ])].map(f => document.fonts.load(f)));
 
     for (const layer of layers) {
         if (layer === "template") {
@@ -384,8 +389,8 @@ async function render() {
             ctx.drawImage(photoImg, -sw / 2, -sh / 2, sw, sh);
             ctx.restore();
         } else if (layer === "text") {
-            if (quoteText)       drawCenteredText(ctx, quoteText, t.quote, font);
-            if (attributionText) drawCenteredText(ctx, `- ${attributionText}`, t.attribution, font);
+            if (quoteText)       drawCenteredText(ctx, quoteText, t.quote, quoteFont);
+            if (attributionText) drawCenteredText(ctx, `- ${attributionText}`, t.attribution, attrFont);
         }
     }
 }

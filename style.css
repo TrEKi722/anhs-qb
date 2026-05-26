@@ -12,6 +12,13 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Playfair Display';
+    src: url('media/PlayfairDisplay.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body { 
     margin: 0; background: #111;
     font-family: 'Tektur', sans-serif;
