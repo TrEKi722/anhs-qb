@@ -41,8 +41,8 @@ const TEMPLATES = {
     },
     "7": {
         layers: ["photo", "text", "template"],
-        photo:       { cx: 1158, cy: 1447, w: 535, h: 645, angle: 20.6 },
-        quote:       { cx: 693,  cy: 795,  maxW: 1130, size: 56, weight: "normal", color: "white", font: "Playfair Display", align: "left" },
-        attribution: { cx: 335,  cy: 1100, maxW: 625,  size: 65, weight: "normal", color: "white", font: "Poppins", align: "left" },
-    },
+        photo:       { cx: 540,  cy: 675,  w: 1080, h: 1350, angle: 0},
+        quote:       { cx: 28,   cy: 838,  maxW: 812,  size: 56, weight: "normal", color: "white", font: "Playfair Display", align: "left"},
+        attribution: { cx: 28,   cy: 1100, maxW: 1072, size: 65, weight: "normal", color: "white", font: "Poppins", align: "left"}
+      }
 };
