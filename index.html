@@ -9,7 +9,10 @@
 <body>
 
     <div class="floating" id="actions-container" style="display:none;">
-        <button id="profile-btn" style="display:none;">
+        <button id="admin-btn" style="display:none;">
+            <img src="media/shield.svg" alt="Admin Dashboard">
+        </button>
+        <button id="profile-btn">
             <img src="media/profile.svg" alt="Profile">
         </button>
         <button id="download-quote-btn" onclick="window.location.href = `https://explorer.cdn.ekinney.com/qb/${new URLSearchParams(window.location.search).get('folder')}/`;">
@@ -62,6 +65,25 @@
                 <input type="submit" value="Sign Up">
                 <p>Already have an account? <a href="#" onclick="document.getElementById('login-form').style.removeProperty('display'); document.getElementById('signup-form').style.display='none';" id="show-login">Login here</a></p>
             </form>
+        </div>
+    </div>
+
+    <div class="modal" id="profile-modal">
+        <div class="modal-content">
+            <span class="close" id="profile-close">&times;</span>
+            <h2>Profile</h2>
+            <div id="avatar-container">
+                <button class="image-button" id="update-pfp">
+                    <img src="media/uploadB.svg" alt="Update Profile Picture">
+                </button>
+                <input type="file" id="pfp-input" accept="image/*" style="display:none">
+            </div>
+            <p id="user-email"></p>
+            <p id="user-display-name"></p>
+            <button class="profile-button" id="change-email-btn" onclick="changeEmail();">Change Email</button>
+            <button class="profile-button" id="change-displayname-btn" onclick="changeDisName();">Change Display Name</button>
+            <button class="profile-button" id="change-password-btn" onclick="changePass();">Change Password</button>
+            <button class="profile-button" id="logout-btn" onclick="logout();">Logout</button>
         </div>
     </div>
 

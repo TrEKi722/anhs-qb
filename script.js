@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
         const { data: profile } = await supabaseC
             .from('profiles')
-            .select('avatar_url, display_name')
+            .select('avatar_url, display_name, is_admin')
             .eq('id', data.session.user.id)
             .single();
 
@@ -24,6 +24,11 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
         document.getElementById("user-email").textContent = data.session.user.email;
         document.getElementById("user-display-name").textContent = profile?.display_name ?? '';
+
+        if (profile?.is_admin) {
+            admin = true;
+            document.getElementById("admin-btn").style.removeProperty("display");
+        }
     }
 
     if (window.location.pathname == "/" && !window.location.search) {
@@ -94,6 +99,7 @@ const SUPABASE_KEY = "sb_publishable_CjflF9tunFsNyONxBlHazw_6E2metQ-";
 const supabaseC = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let authenticated = false;
+let admin = false;
 
 async function login(em, pa) {
     if (!em || !pa) return showToast("Please enter both email and password.");

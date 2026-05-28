@@ -1,6 +1,8 @@
 export async function onRequestPost(context) {
   const { request, env } = context;
 
+  let admin = false;
+
   let body;
   try {
     body = await request.json();
@@ -13,8 +15,12 @@ export async function onRequestPost(context) {
     return Response.json({ error: "Missing required fields." }, { status: 400 });
   }
 
-  if (accessCode !== env.ACCESS_CODE) {
+  if (accessCode !== env.ACCESS_CODE && accessCode !== env.ADMIN_ACCESS_CODE) {
     return Response.json({ error: "Invalid access code." }, { status: 403 });
+  }
+
+  if (accessCode == env.ADMIN_ACCESS_CODE) {
+    admin = true;
   }
 
   const supabaseUrl = env.SUPABASE_URL;
@@ -47,7 +53,7 @@ export async function onRequestPost(context) {
       'Content-Type': 'application/json',
       'Prefer': 'resolution=merge-duplicates,return=minimal',
     },
-    body: JSON.stringify({ id: userId, display_name: disname }),
+    body: JSON.stringify({ id: userId, display_name: disname, is_admin: admin }),
   });
 
   if (!profileRes.ok) {
