@@ -265,6 +265,30 @@ p {
     display: block;
 }
 
+/* ----------------- */
+/* - Profile Modal - */
+/* ----------------- */
+
+.avatar {
+    border-radius: 100%;
+    aspect-ratio: 1;
+    width: 300px;
+}
+
+.image-button {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    width: 300px;
+    width: 300px;
+    display: none;
+}
+
+.image-button:hover {
+    display: block;
+    background-color: rgba(83, 83, 83, 0.646);
+}
+
 /* Navigation */
 nav {
     background: var(--card-bg);

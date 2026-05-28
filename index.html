@@ -9,6 +9,9 @@
 <body>
 
     <div class="floating" id="actions-container" style="display:none;">
+        <button id="profile-btn" style="display:none;">
+            <img src="media/profile.svg" alt="Profile">
+        </button>
         <button id="download-quote-btn" onclick="window.location.href = `https://explorer.cdn.ekinney.com/qb/${new URLSearchParams(window.location.search).get('folder')}/`;">
             <img src="media/downloadB.svg" alt="Downloads">
         </button>        
@@ -45,11 +48,11 @@
                 <input type="submit" value="Login">
                 <p>Don't have an account? <a href="#" onclick="document.getElementById('login-form').style.display='none'; document.getElementById('signup-form').style.removeProperty('display');" id="show-signup">Sign up here</a></p>
             </form>
-            <form id="signup-form" style="display:none;" onsubmit="signup(document.getElementById('signup-email').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value, document.getElementById('signup-code').value); return false;">
+            <form id="signup-form" style="display:none;" onsubmit="signup(document.getElementById('signup-email').value, document.getElementById('display-name').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value, document.getElementById('signup-code').value); return false;">
                 <label for="signup-email">Email</label><br>
                 <input type="text" id="signup-email" name="signup-email" placeholder="example@example.com"><br>
                 <label for="display-name">Display Name</label><br>
-                <input type="" id="display-name" name="display-name" placeholder="Display Name"><br>
+                <input type="text" id="display-name" name="display-name" placeholder="Display Name"><br>
                 <label for="signup-password">Password</label><br>
                 <input type="password" id="signup-password" name="signup-password" placeholder="Password"><br>
                 <label for="signup-confirm-password">Confirm Password</label><br>
@@ -59,6 +62,25 @@
                 <input type="submit" value="Sign Up">
                 <p>Already have an account? <a href="#" onclick="document.getElementById('login-form').style.removeProperty('display'); document.getElementById('signup-form').style.display='none';" id="show-login">Login here</a></p>
             </form>
+        </div>
+    </div>
+
+    <div class="modal" id="profile-modal">
+        <div class="modal-content">
+            <span class="close" id="profile-close">&times;</span>
+            <h2>Profile</h2>
+            <div id="avatar-container">
+                <button class="image-button" id="update-pfp">
+                    <img src="media/uploadB.svg" alt="Update Profile Picture">
+                </button>
+                <input type="file" id="pfp-input" accept="image/*" style="display:none">
+            </div>
+            <p id="user-email"></p>
+            <p id="user-display-name"></p>
+            <button id="change-email-btn" onclick="changeEmail();">Change Email</button>
+            <button id="change-displayname-btn" onclick="changeDisName();">Change Display Name</button>
+            <button id="change-password-btn" onclick="changePass();">Change Password</button>
+            <button id="logout-btn" onclick="logout();">Logout</button>
         </div>
     </div>
 

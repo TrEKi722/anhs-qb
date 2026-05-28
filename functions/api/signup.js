@@ -8,8 +8,8 @@ export async function onRequestPost(context) {
     return Response.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  const { email, password, accessCode } = body;
-  if (!email || !password || !accessCode) {
+  const { email, disname, password, accessCode } = body;
+  if (!email || !disname || !password || !accessCode) {
     return Response.json({ error: "Missing required fields." }, { status: 400 });
   }
 
@@ -35,6 +35,25 @@ export async function onRequestPost(context) {
   if (!supaRes.ok) {
     const msg = supaData?.msg || supaData?.message || "Sign up failed. Please try again.";
     return Response.json({ error: msg }, { status: supaRes.status });
+  }
+
+  const userId = supaData.id;
+
+  const profileRes = await fetch(`${supabaseUrl}/rest/v1/profiles`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${serviceKey}`,
+      'apikey': serviceKey,
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates,return=minimal',
+    },
+    body: JSON.stringify({ id: userId, display_name: disname }),
+  });
+
+  if (!profileRes.ok) {
+    const profileData = await profileRes.json().catch(() => ({}));
+    const msg = profileData?.message || "Account created but profile setup failed.";
+    return Response.json({ error: msg }, { status: 500 });
   }
 
   return Response.json({ success: true }, { status: 200 });

@@ -6,8 +6,23 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     const { data } = await supabaseC.auth.getSession();
     if (data.session) {
         authenticated = true;
+
+        const { data: profile } = await supabaseC
+            .from('profiles')
+            .select('avatar_url, display_name')
+            .eq('id', data.session.user.id)
+            .single();
+
         document.getElementById("login-btn-container").style.display = "none";
         document.getElementById("actions-container").style.display = "flex";
+
+        const img = document.createElement("img");
+        img.classList.add('avatar');
+        img.src = profile?.avatar_url ?? data.session.user.user_metadata.avatar_url;
+        document.getElementById("avatar-container").appendChild(img);
+
+        document.getElementById("user-email").textContent = data.session.user.email;
+        document.getElementById("user-display-name").textContent = profile?.display_name ?? '';
     }
 
     if (window.location.pathname == "/" && !window.location.search) {
@@ -103,8 +118,8 @@ async function login(em, pa) {
     }
 }
 
-async function signup(em, pa, paConfirm, code) {
-    if (!em || !pa || !paConfirm || !code) return showToast("Please fill in all fields.");
+async function signup(em, dn, pa, paConfirm, code) {
+    if (!em || !dn || !pa || !paConfirm || !code) return showToast("Please fill in all fields.");
     if (pa !== paConfirm) return showToast("Passwords do not match.");
 
     let res, data;
@@ -112,7 +127,7 @@ async function signup(em, pa, paConfirm, code) {
         res = await fetch("/api/signup", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: em, password: pa, accessCode: code }),
+            body: JSON.stringify({ email: em, disname: dn, password: pa, accessCode: code }),
         });
         data = await res.json();
     } catch {
@@ -140,6 +155,32 @@ async function signup(em, pa, paConfirm, code) {
     }
 }
 
+async function changeEmail() {
+    let newEm = prompt('Enter your new email:')
+    const { data, error } = await supabaseC.auth.updateUser({
+        email: newEm
+    })
+    if (error) return showToast("Error, please try again");
+}
+
+async function changeDisName() {
+    let newDN = prompt('Enter your new display name:')
+    const { data: sessionData } = await supabaseC.auth.getSession();
+    const { error } = await supabaseC
+        .from('profiles')
+        .update({ display_name: newDN })
+        .eq('id', sessionData.session.user.id);
+    if (error) return showToast("Error, please try again");
+}
+
+async function changePass() {
+    let newPa = prompt('Enter your new password:')
+    const { data, error } = await supabaseC.auth.updateUser({
+        password: newPa
+    })
+    if (error) return showToast("Error, please try again");
+}
+
 async function logout() {
     const { error } = await supabaseC.auth.signOut();
     if (!error) {
@@ -148,6 +189,41 @@ async function logout() {
         document.getElementById("actions-container").style.display = "none";
     }
 }
+
+/* -------------- */
+/* -- Change PFP -- */
+/* -------------- */
+document.getElementById('update-pfp').addEventListener('click', () => {
+    document.getElementById('pfp-input').click();
+});
+
+document.getElementById('pfp-input').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const { data: sessionData } = await supabaseC.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) return showToast('You must be logged in.');
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch('/api/changepfp', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+        document.querySelector('#avatar-container img') && (document.querySelector('#avatar-container img').src = data.avatar_url);
+        showToast('Profile picture updated!');
+    } else {
+        showToast(data.error ?? 'Failed to update profile picture.');
+    }
+
+    e.target.value = '';
+});
 
 /* ------------ */
 /* -- Upload -- */
