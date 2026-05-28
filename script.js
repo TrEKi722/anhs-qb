@@ -97,7 +97,11 @@ window.onclick = function(event) {
 
 const SUPABASE_URL = "https://pdvxvgcigowwnfqpjjni.supabase.co/";
 const SUPABASE_KEY = "sb_publishable_CjflF9tunFsNyONxBlHazw_6E2metQ-";
-const supabaseC = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseC = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+    auth: {
+      experimental: { passkey: true },
+    },
+});
 
 let authenticated = false;
 let admin = false;
@@ -144,7 +148,21 @@ async function signup(em, dn, pa, paConfirm, code) {
     }
 
     if (data.success) {
-        showToast("Account created! You can now log in.");
+        const { error: loginError } = await supabaseC.auth.signInWithPassword({ email: em, password: pa });
+        if (!loginError) {
+            authenticated = true;
+            document.getElementById("login-btn-container").style.display = "none";
+            document.getElementById("actions-container").style.display = "flex";
+            showToast("Account created! Welcome.");
+
+            const wantsPass = confirm("Would you like to set up a passkey? (Recommended for easier and more secure logins in the future)");
+            if (wantsPass) {
+                regPsky();
+            }
+
+        } else {
+            showToast("Account created! Please log in.");
+        }
         acntModal.style.display = "none";
     } else {
         const signupErrors = {
@@ -201,8 +219,22 @@ async function logout() {
     }
 }
 
+async function regPsky() {
+    const { data, error } = await supabaseC.auth.registerPasskey();
+    if (error) {
+        return showToast("Error registering passkey"); // User cancelled, browser doesn't support WebAuthn, or verification failed
+    } else {
+        return showToast("Passkey registered!");
+    }
+}
+
+async function listPskys() {
+    const { data: passkeys } = await supabase.auth.passkey.list()
+    return passkeys;
+}
+
 /* ------------------- */
-/* -- Profile Modal -- */
+/* ----- Profile ----- */
 /* ------------------- */
 
 async function loadProfile() {
