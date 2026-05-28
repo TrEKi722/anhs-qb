@@ -44,11 +44,12 @@ export async function onRequestPost(context) {
       }
   
       const name = formData.get('name');
+      const folder = formData.get('folder');
       if (!name) {
         return Response.json({ error: 'Missing name.' }, { status: 400 });
       }
   
-      const key = `qb/${name}`;
+      const key = `qb/${folder}/${name}`;
       await env.R2.delete(key);
 
       return Response.json({ success: true, key }, { status: 200 });

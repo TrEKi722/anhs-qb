@@ -68,22 +68,12 @@
         </div>
     </div>
 
-    <div class="modal" id="profile-modal">
+    <div class="modal" id="admin-modal">
         <div class="modal-content">
-            <span class="close" id="profile-close">&times;</span>
-            <h2>Profile</h2>
-            <div id="avatar-container">
-                <button class="image-button" id="update-pfp">
-                    <img src="media/uploadB.svg" alt="Update Profile Picture">
-                </button>
-                <input type="file" id="pfp-input" accept="image/*" style="display:none">
-            </div>
-            <p id="user-email"></p>
-            <p id="user-display-name"></p>
-            <button class="profile-button" id="change-email-btn" onclick="changeEmail();">Change Email</button>
-            <button class="profile-button" id="change-displayname-btn" onclick="changeDisName();">Change Display Name</button>
-            <button class="profile-button" id="change-password-btn" onclick="changePass();">Change Password</button>
-            <button class="profile-button" id="logout-btn" onclick="logout();">Logout</button>
+            <span class="close" id="admin-close">&times;</span>
+            <h2>Admin</h2>
+            <button class="profile-button" id="create-folder-btn" onclick="createFolder();">Create Folder</button>
+            <button class="profile-button" id="delete-quote-btn" onclick="deleteQuote();">Delete Quote</button>
         </div>
     </div>
 

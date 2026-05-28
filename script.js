@@ -80,12 +80,13 @@ function wireModal(modalId, openId, closeId) {
 }
 
 var profModal   = wireModal('profile-modal','profile-btn',      'profile-close');
+var adminModal  = wireModal('admin-modal',  'admin-btn',        'admin-close');
 var acntModal   = wireModal('acnt-modal',   'login-btn',        'acnt-close');
 var uploadModal = wireModal('upload-modal', 'upload-quote-btn', 'upload-close');
 var createModal = wireModal('create-modal', 'create-quote-btn', 'create-close');
 
 window.onclick = function(event) {
-    [acntModal, uploadModal, createModal].forEach(m => {
+    [profModal, adminModal, acntModal, uploadModal, createModal].forEach(m => {
         if (event.target === m) m.style.display = 'none';
     });
 }
@@ -198,9 +199,9 @@ async function logout() {
     }
 }
 
-/* -------------- */
+/* ---------------- */
 /* -- Change PFP -- */
-/* -------------- */
+/* ---------------- */
 document.getElementById('update-pfp').addEventListener('click', () => {
     document.getElementById('pfp-input').click();
 });
@@ -418,6 +419,59 @@ document.getElementById('create-submit-btn').onclick = async function () {
         console.error(err);
     }
 };
+
+/* ------------- */
+/* --- Admin --- */
+/* ------------- */
+
+async function deleteQuote() {
+    let name = prompt('Enter the name of the quote to delete in current folder (including extension):');
+    if (!name) return showToast('Name cannot be empty.');
+    const { data: sessionData } = await supabaseC.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) return showToast('You must be logged in.');
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('folder', new URLSearchParams(window.location.search).get('folder'));
+
+    const res = await fetch('/api/delete', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+        showToast('Quote deleted!');
+        loadGallery();
+    } else {
+        showToast(data.error ?? 'Failed to delete quote.');
+    }
+}
+
+async function createFolder() {
+    let name = prompt('Enter the name of the new folder to be created (will be created at qb/):');
+    if (!name) return showToast('Name cannot be empty.');
+    const { data: sessionData } = await supabaseC.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) return showToast('You must be logged in.');
+    const formData = new FormData();
+    formData.append('name', name);
+
+    const res = await fetch('/api/createFolder', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData,
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+        showToast('Folder created!');
+        loadGallery();
+    } else {
+        showToast(data.error ?? 'Failed to create folder.');
+    }
+}
 
 /* ------------- */
 /* --- Toast --- */
