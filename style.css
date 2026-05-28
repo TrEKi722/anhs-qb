@@ -275,18 +275,27 @@ p {
     width: 300px;
 }
 
-.image-button {
-    position: absolute;
-    top: 0px;
-    right: 0;
+#avatar-container {
+    position: relative;
     width: 300px;
-    width: 300px;
-    display: none;
 }
 
-.image-button:hover {
-    display: block;
+.image-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    border-radius: 100%;
     background-color: rgba(83, 83, 83, 0.646);
+    cursor: pointer;
+}
+
+#avatar-container:hover .image-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Navigation */

@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
         const img = document.createElement("img");
         img.classList.add('avatar');
         img.id = 'avatar-img';
-        img.src = profile?.avatar_url ?? data.session.user.user_metadata.avatar_url ?? "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%2300857D'/%3E%3C/svg%3E";
+        img.src = profile?.avatar_url ?? data.session.user.user_metadata.avatar_url ?? "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect width='1' height='1' fill='%2300857D'/%3E%3C/svg%3E";
         document.getElementById("avatar-container").appendChild(img);
 
         document.getElementById("user-email").textContent = data.session.user.email;
