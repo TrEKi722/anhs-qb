@@ -26,6 +26,10 @@ p {
     font-size: 1.2rem;
 }
 
+button:hover {
+    cursor: pointer;
+}
+
 /* --------------------- */
 /* --- Toast Message --- */
 /* --------------------- */
@@ -171,9 +175,12 @@ p {
 
 .modal-content input[type="submit"] {
     font-family: 'Tektur';
-    font-size: 1.1rem;
+    font-size: 1.25rem;
+    width: stretch;
+    margin: 1rem;
+    background: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 15px;
 }
 
 /* The Close Button */

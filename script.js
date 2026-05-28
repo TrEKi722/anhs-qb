@@ -216,7 +216,14 @@ async function logout() {
         authenticated = false;
         document.getElementById("login-btn-container").style.display = "flex";
         document.getElementById("actions-container").style.display = "none";
+        profModal.style.display = "none";
+        loadProfile();
     }
+}
+
+async function loginWithPasskey() {
+    const { data, error } = await supabaseC.auth.signInWithPasskey();
+    if (error) return showToast('Error logging in with passkey');
 }
 
 async function regPsky() {

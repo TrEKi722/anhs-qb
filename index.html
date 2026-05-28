@@ -49,6 +49,7 @@
                 <label for="password">Password</label><br>
                 <input type="password" id="password" name="password" placeholder="Password"><br>
                 <input type="submit" value="Login">
+                <button type="button" class="profile-button" onclick="loginWithPasskey();">Login with Passkey</button>
                 <p>Don't have an account? <a href="#" onclick="document.getElementById('login-form').style.display='none'; document.getElementById('signup-form').style.removeProperty('display');" id="show-signup">Sign up here</a></p>
             </form>
             <form id="signup-form" style="display:none;" onsubmit="signup(document.getElementById('signup-email').value, document.getElementById('display-name').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value, document.getElementById('signup-code').value); return false;">
@@ -87,8 +88,8 @@
                 </button>
                 <input type="file" id="pfp-input" accept="image/*" style="display:none">
             </div>
-            <p id="user-email"></p>
             <p id="user-display-name"></p>
+            <p id="user-email"></p>
             <button class="profile-button" id="change-email-btn" onclick="changeEmail();">Change Email</button>
             <button class="profile-button" id="change-displayname-btn" onclick="changeDisName();">Change Display Name</button>
             <button class="profile-button" id="change-password-btn" onclick="changePass();">Change Password</button>
