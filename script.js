@@ -223,7 +223,17 @@ async function logout() {
 
 async function loginWithPasskey() {
     const { data, error } = await supabaseC.auth.signInWithPasskey();
-    if (error) return showToast('Error logging in with passkey');
+
+    if (!error) {
+        authenticated = true;
+        document.getElementById("login-btn-container").style.display = "none";
+        document.getElementById("actions-container").style.display = "flex";
+        acntModal.style.display = "none";
+    } else {
+        showToast("Sign in failed. Please try again.");
+        console.log(error);
+    }
+
 }
 
 async function regPsky() {
