@@ -73,6 +73,7 @@ function wireModal(modalId, openId, closeId) {
     return modal;
 }
 
+var profModal   = wireModal('profile-modal','profile-btn',      'profile-close');
 var acntModal   = wireModal('acnt-modal',   'login-btn',        'acnt-close');
 var uploadModal = wireModal('upload-modal', 'upload-quote-btn', 'upload-close');
 var createModal = wireModal('create-modal', 'create-quote-btn', 'create-close');
