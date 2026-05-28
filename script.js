@@ -241,10 +241,12 @@ document.getElementById('pfp-input').addEventListener('change', async (e) => {
 const form = document.getElementById('upload-form');
 const resultEl = document.getElementById('result');
 
-async function postToUploadApi(fileOrBlob, filename, folder, token) {
+async function postToUploadApi(fileOrBlob, filename, folder, quote, attribution, token) {
     const formData = new FormData();
     formData.append('file', fileOrBlob, filename);
     formData.append('folder', folder);
+    formData.append('quote', quote);
+    formData.append('attribution', attribution);
     const res = await fetch('/api/upload', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
@@ -259,15 +261,19 @@ async function postToUploadApi(fileOrBlob, filename, folder, token) {
 async function uploadFile() {
     const file = document.getElementById('file-input').files[0];
     const folder = new URLSearchParams(window.location.search).get('folder');
+    const quote = document.getElementById('upload-quote-input').value.trim();
+    const attribution = document.getElementById('upload-attribution-input').value.trim();
     if (!file) return showToast('Please choose a file.');
-    if (!folder) return showToast('No folder in URL.');
+    if (!folder) return showToast("No folder in URL. (How'd you even get here?)");
+    if (!quote) return showToast('Please enter a quote.');
+    if (!attribution) return showToast('Please enter an attribution.');
 
     const { data: sessionData } = await supabaseC.auth.getSession();
     const token = sessionData?.session?.access_token;
     if (!token) return showToast('You must be logged in to upload.');
 
     try {
-        const { ok, status, data, text } = await postToUploadApi(file, file.name, folder, token);
+        const { ok, status, data, text } = await postToUploadApi(file, file.name, folder, quote, attribution, token);
         if (!ok || !data) {
             resultEl.textContent = `Error ${status}: ` + (data?.error || text.slice(0, 200));
         } else {
@@ -405,7 +411,7 @@ document.getElementById('create-submit-btn').onclick = async function () {
             canvas.toBlob(b => b ? resolve(b) : reject(new Error('Failed to generate image')), 'image/png')
         );
 
-        const { ok } = await postToUploadApi(blob, `quote-${Date.now()}.png`, folder, token);
+        const { ok } = await postToUploadApi(blob, `quote-${Date.now()}.png`, folder, quoteText, attributionText, token);
         if (!ok) {
             showToast('Upload failed.');
         } else {

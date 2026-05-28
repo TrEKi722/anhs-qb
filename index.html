@@ -103,6 +103,20 @@
             <p>This will upload to the folder you are currently viewing - (<script>document.write(new URLSearchParams(window.location.search).get('folder') || 'unknown')</script>)</p>
             <form id="upload-form" onsubmit="uploadFile(); return false;">
                 <input type="file" name="file" id="file-input">
+                <p>Enter the <strong>quote</strong>:</p>
+                <input type="text" name="upload-quote-input" id="upload-quote-input">    
+                <p>Choose the <strong>attribution</strong>:</p>
+                <select name="upload-attribution-input" id="upload-attribution-input">
+                    <option value="">Select an attribution</option>
+                    <option value="Troy Ethan Kinney">Troy Ethan Kinney</option>
+                    <option value="Jordan Robert Miley">Jordan Robert Miley</option>
+                    <option value="Russel Mitchel Gohl">Russel Mitchel Gohl</option>
+                    <option value="Daniel Richard Gates">Daniel Richard Gates</option>
+                    <option value="Elliot Jungi Hong">Elliot Jungi Hong</option>
+                    <option value="Lucas James Dalby">Lucas James Dalby</option>
+                    <option value="Edem">Edem</option>
+                    <option value="O Sukhanil">O Sukhanil</option>
+                </select>
                 <input type="submit" value="Upload">
             </form>
             <pre id="result"></pre>
@@ -150,8 +164,18 @@
             </div>
             <p>Enter the <strong>quote</strong>:</p>
             <input type="text" name="quote-input" id="quote-input">
-            <p>Enter the <strong>attribution</strong>:</p>
-            <input type="text" name="attribution-input" id="attribution-input">
+            <p>Choose the <strong>attribution</strong>:</p>
+            <select name="attribution-input" id="attribution-input">
+                <option value="">Select an attribution</option>
+                <option value="Troy Ethan Kinney">Troy Ethan Kinney</option>
+                <option value="Jordan Robert Miley">Jordan Robert Miley</option>
+                <option value="Russel Mitchel Gohl">Russel Mitchel Gohl</option>
+                <option value="Daniel Richard Gates">Daniel Richard Gates</option>
+                <option value="Elliot Jungi Hong">Elliot Jungi Hong</option>
+                <option value="Lucas James Dalby">Lucas James Dalby</option>
+                <option value="Edem">Edem</option>
+                <option value="O Sukhanil">O Sukhanil</option>
+            </select>
             <button id="create-submit-btn" type="button">✨ Create ✨</button>
         </div>
     </div>
