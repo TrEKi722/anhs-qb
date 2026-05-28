@@ -269,6 +269,15 @@ p {
 /* - Profile Modal - */
 /* ----------------- */
 
+#profile-modal button {
+    font-family: 'Tektur';
+    font-size: 1.25rem;
+    width: stretch;
+    margin: 1rem;
+    background: white;
+    border-radius: 15px;
+}
+
 .avatar {
     border-radius: 100%;
     aspect-ratio: 1;
@@ -296,15 +305,6 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-#profile-modal button {
-    font-family: 'Tektur';
-    font-size: 1.25rem;
-    width: stretch;
-    margin: 1rem;
-    background: white;
-    border-radius: 15px;
 }
 
 /* Navigation */
