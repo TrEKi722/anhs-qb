@@ -18,7 +18,8 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
         const img = document.createElement("img");
         img.classList.add('avatar');
-        img.src = profile?.avatar_url ?? data.session.user.user_metadata.avatar_url;
+        img.id = 'avatar-img';
+        img.src = profile?.avatar_url ?? data.session.user.user_metadata.avatar_url ?? "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3Crect fill='%2300857D'/%3E%3C/svg%3E";
         document.getElementById("avatar-container").appendChild(img);
 
         document.getElementById("user-email").textContent = data.session.user.email;
@@ -217,7 +218,8 @@ document.getElementById('pfp-input').addEventListener('change', async (e) => {
     const data = await res.json();
 
     if (res.ok) {
-        document.querySelector('#avatar-container img') && (document.querySelector('#avatar-container img').src = data.avatar_url);
+        const avatarImg = document.getElementById('avatar-img');
+        if (avatarImg) avatarImg.src = data.avatar_url;
         showToast('Profile picture updated!');
     } else {
         showToast(data.error ?? 'Failed to update profile picture.');
