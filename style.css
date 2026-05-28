@@ -26,15 +26,6 @@ p {
     font-size: 1.2rem;
 }
 
-button {
-    font-family: 'Tektur';
-    font-size: 1.25rem;
-    width: stretch;
-    margin: 1rem;
-    background: white;
-    border-radius: 15px;
-}
-
 /* --------------------- */
 /* --- Toast Message --- */
 /* --------------------- */
@@ -305,6 +296,15 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#profile-modal button {
+    font-family: 'Tektur';
+    font-size: 1.25rem;
+    width: stretch;
+    margin: 1rem;
+    background: white;
+    border-radius: 15px;
 }
 
 /* Navigation */
