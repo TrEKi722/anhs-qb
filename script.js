@@ -170,6 +170,7 @@ async function changeEmail() {
         email: newEm
     })
     if (error) return showToast("Error, please try again");
+    loadProfile();
 }
 
 async function changeDisName() {
@@ -180,6 +181,7 @@ async function changeDisName() {
         .update({ display_name: newDN })
         .eq('id', sessionData.session.user.id);
     if (error) return showToast("Error, please try again");
+    loadProfile();
 }
 
 async function changePass() {
@@ -199,9 +201,34 @@ async function logout() {
     }
 }
 
+/* ------------------- */
+/* -- Profile Modal -- */
+/* ------------------- */
+
+async function loadProfile() {
+    const { data: sessionData } = await supabaseC.auth.getSession();
+    if (!sessionData) return showToast('You must be logged in.');
+
+    const { data: profile, error } = await supabaseC
+        .from('profiles')
+        .select('display_name, avatar_url')
+        .eq('id', sessionData.session.user.id)
+        .single();
+
+    if (error) {
+        showToast('Failed to load profile.');
+        console.log(error);
+    } else {
+        document.getElementById("user-display-name").textContent = profile.display_name;
+        const avatarImg = document.getElementById('avatar-img');
+        if (avatarImg) avatarImg.src = profile.avatar_url ?? sessionData.session.user.user_metadata.avatar_url ?? "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect width='1' height='1' fill='%2300857D'/%3E%3C/svg%3E";
+    }
+}
+
 /* ---------------- */
 /* -- Change PFP -- */
 /* ---------------- */
+
 document.getElementById('update-pfp').addEventListener('click', () => {
     document.getElementById('pfp-input').click();
 });
@@ -233,6 +260,7 @@ document.getElementById('pfp-input').addEventListener('change', async (e) => {
     }
 
     e.target.value = '';
+    loadProfile();
 });
 
 /* ------------ */
