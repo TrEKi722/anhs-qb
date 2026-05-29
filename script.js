@@ -126,6 +126,11 @@ window.onclick = function(event) {
     });
 }
 
+function hideShowFilters() {
+    const filters = document.getElementById('filters');
+    filters.style.display = filters.style.display === 'none' ? 'flex' : 'none';
+}
+
 /* ------------ */
 /* - Supabase - */
 /* ------------ */
