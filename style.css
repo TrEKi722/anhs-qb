@@ -129,9 +129,13 @@ button:hover {
 .filters-menu {
     display: flex;
     position: fixed;
-    top: 60px;
-    right: 10px;
-    background: var(--card-bg);
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 8px;
+    top: 5rem;
+    right: 0.5rem;
+    background: rgba(0,0,0,0.4);
 }
 
 /* ------------------------ */
