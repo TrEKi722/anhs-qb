@@ -131,6 +131,10 @@ function hideShowFilters() {
     filters.style.display = filters.style.display === 'none' ? 'flex' : 'none';
 }
 
+window.onscroll = function() {
+    document.getElementById('filters').style.display = 'none';
+}
+
 /* ------------ */
 /* - Supabase - */
 /* ------------ */
