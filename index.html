@@ -35,7 +35,15 @@
     <nav>
         <a href="/?folder=2027">2027</a>
         <a href="/?folder=2026">2026</a>
+        <img src="media/filterW.svg" id="filter-icon" style="align-self:right;justify-self:right;" onclick="document.getElementById(filters).style.removeProperty('display');">
     </nav>
+
+    <div class="filters-menu" id="filters" style="display:none;">
+        <input type="text" id="search-input" placeholder="Search quotes...">
+        <select id="attribution-filter">
+            <option value="">All</option>
+        </select>
+    </div>
 
     <div id="gallery"></div>
 

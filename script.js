@@ -41,21 +41,58 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 /* ----------- */
 
 const CDN = "https://cdn.ekinney.com";
-const WORKER = "https://list-cdn-objects.722kinney.workers.dev";
-const PREFIX = "qb/" + new URLSearchParams(window.location.search).get("folder");
+const FOLDER = new URLSearchParams(window.location.search).get("folder");
+
+let photoData = [];
 
 async function loadGallery() {
-    const res = await fetch(`${WORKER}/list?prefix=${PREFIX}`);
-    const keys = await res.json();
-    const gallery = document.getElementById("gallery");
-    gallery.innerHTML = '';
+    const { data, error } = await supabaseC
+        .from('photo_data')
+        .select('filename, quote, attribution, folder')
+        .eq('folder', FOLDER);
 
-    for (const key of keys) {
-        const img = document.createElement("img");
-        img.src = `${CDN}/${key}`;
+    if (error) { console.error(error); return; }
+
+    photoData = data ?? [];
+    populateAttributionFilter();
+    renderGalleryItems(shuffleArray([...photoData]));
+}
+
+function renderGalleryItems(items) {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = '';
+    for (const item of items) {
+        const img = document.createElement('img');
+        img.src = `${CDN}/qb/${item.folder}/${item.filename}`;
         gallery.appendChild(img);
     }
-    shuffleArray(Array.from(gallery.children)).forEach(img => gallery.appendChild(img));
+}
+
+function populateAttributionFilter() {
+    const select = document.getElementById('attribution-filter');
+    if (!select) return;
+    const attributions = [...new Set(photoData.map(r => r.attribution).filter(Boolean))].sort();
+    while (select.options.length > 1) select.remove(1);
+    for (const attr of attributions) {
+        const opt = document.createElement('option');
+        opt.value = attr;
+        opt.textContent = attr;
+        select.appendChild(opt);
+    }
+}
+
+function applyFilters() {
+    const search = (document.getElementById('search-input')?.value ?? '').trim().toLowerCase();
+    const attr = document.getElementById('attribution-filter')?.value ?? '';
+
+    let filtered = photoData;
+    if (search) filtered = filtered.filter(r =>
+        r.quote?.toLowerCase().includes(search) ||
+        r.attribution?.toLowerCase().includes(search)
+    );
+    if (attr) filtered = filtered.filter(r => r.attribution === attr);
+
+    renderGalleryItems(!search && !attr ? shuffleArray([...filtered]) : filtered);
 }
 
 function shuffleArray(arr) {
@@ -65,8 +102,6 @@ function shuffleArray(arr) {
     }
     return arr;
 }  
-
-loadGallery();
 
 /* ------------ */
 /* -- Modals -- */
@@ -105,6 +140,10 @@ const supabaseC = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
 
 let authenticated = false;
 let admin = false;
+
+loadGallery();
+document.getElementById('search-input')?.addEventListener('input', applyFilters);
+document.getElementById('attribution-filter')?.addEventListener('change', applyFilters);
 
 async function login(em, pa) {
     if (!em || !pa) return showToast("Please enter both email and password.");
