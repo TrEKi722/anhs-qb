@@ -9,6 +9,7 @@ export async function onRequestPost(context) {
 
     const supabaseUrl = env.SUPABASE_URL ?? "https://pdvxvgcigowwnfqpjjni.supabase.co";
     const supabaseKey = env.SUPABASE_ANON_KEY ?? "sb_publishable_CjflF9tunFsNyONxBlHazw_6E2metQ-";
+    const serviceKey = env.SUPABASE_SERVICE_ROLE_KEY;
     const authRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -18,6 +19,7 @@ export async function onRequestPost(context) {
     if (!authRes.ok) {
       return Response.json({ error: 'Unauthorized.' }, { status: 401 });
     }
+    const userId = (await authRes.json()).id;
 
     let formData;
     try {
