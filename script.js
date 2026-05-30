@@ -211,10 +211,14 @@ async function signup(em, dn, pa, paConfirm, code) {
         } else {
             showToast("Account created! Please log in.");
         }
+        if(data.is_admin) {
+            admin = true;
+            document.getElementById("admin-btn").style.removeProperty("display");
+        }
         acntModal.style.display = "none";
     } else {
         const signupErrors = {
-            "Invalid access code.": "Incorrect access code.",
+            "Invalid access code.": "Invalid access code.",
             "User already registered": "An account with that email already exists.",
             "Password should be at least 12 characters.": "Password must be at least 12 characters.",
             "Unable to validate email address: invalid format": "Please enter a valid email address.",

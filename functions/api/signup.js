@@ -62,5 +62,5 @@ export async function onRequestPost(context) {
     return Response.json({ error: msg }, { status: 500 });
   }
 
-  return Response.json({ success: true }, { status: 200 });
+  return Response.json({ success: true, is_admin: admin }, { status: 200 });
 }
