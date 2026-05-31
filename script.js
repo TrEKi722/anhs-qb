@@ -286,28 +286,35 @@ async function deleteAccountByDN(displayName) {
         const { data, error } = await supabaseC
             .from('profiles')
             .select('id')
-            .eq('display_name', displayName)
-        deleteAccount(data?.[0]?.id);
+            .eq('display_name', displayName);
+        if (error || !data?.[0]?.id) return showToast("No account found with that display name.");
+        deleteAccount(data[0].id);
     }
 }
 
 async function deleteAccount(uuid = null) {
+    if (!uuid) {
+        let yn = confirm('Are you sure you wish to delete your account? This action cannot be undone.');
+        if (!yn) return;
+    }
     const target = uuid ?? (await supabaseC.auth.getSession()).data.session.user.id;
-    if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
+
+    const token = (await supabaseC.auth.getSession()).data.session?.access_token;
+    if (!token) return showToast("You must be logged in.");
 
     let res, data;
     try {
         res = await fetch("/api/deleteUser", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ uuid: ( target ) }),
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+            body: JSON.stringify({ uuid: target }),
         });
         data = await res.json();
     } catch {
         return showToast("Network error. Please try again.");
     }
 
-    if (res.success) {
+    if (data.success) {
         showToast("Account deleted successfully. Reloading...");
         setTimeout(() => {
             window.location.reload();
