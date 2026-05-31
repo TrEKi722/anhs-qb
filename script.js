@@ -64,6 +64,7 @@ function renderGalleryItems(items) {
     for (const item of items) {
         const img = document.createElement('img');
         img.src = `${CDN}/qb/${item.folder}/${item.filename}`;
+        img.id = item.filename;
         gallery.appendChild(img);
     }
 }
@@ -581,7 +582,7 @@ document.getElementById('create-submit-btn').onclick = async function () {
             canvas.toBlob(b => b ? resolve(b) : reject(new Error('Failed to generate image')), 'image/png')
         );
 
-        const { ok } = await postToUploadApi(blob, `quote-${Date.now()}.png`, folder, quoteText, attributionText, token);
+        const { ok } = await postToUploadApi(blob, `${attributionText.replace(/\s+/g, '_').toLowerCase()}-${Math.random().toString(36).substring(2, 10)}.png`, folder, quoteText, attributionText, token);
         if (!ok) {
             showToast('Upload failed.');
         } else {
