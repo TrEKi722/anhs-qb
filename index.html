@@ -50,7 +50,7 @@
     <div class="modal" id="acnt-modal">
         <div class="modal-content">
             <span class="close" id="acnt-close">&times;</span>
-            <h2>Login</h2>
+            <h2 id="acnt-title">Login</h2>
             <form id="login-form" onsubmit="login(document.getElementById('email').value, document.getElementById('password').value); return false;">
                 <label for="email">Email</label><br>
                 <input type="text" id="email" name="email" placeholder="example@example.com"><br>
@@ -58,7 +58,7 @@
                 <input type="password" id="password" name="password" placeholder="Password"><br>
                 <input type="submit" value="Login">
                 <button type="button" class="profile-button" onclick="loginWithPasskey();">Login with Passkey</button>
-                <p>Don't have an account? <a href="#" onclick="document.getElementById('login-form').style.display='none'; document.getElementById('signup-form').style.removeProperty('display');" id="show-signup">Sign up here</a></p>
+                <p>Don't have an account? <a href="#" onclick="document.getElementById('login-form').style.display='none'; document.getElementById('signup-form').style.removeProperty('display'); document.getElementById('acnt-title').textContent = 'Sign Up';" id="show-signup">Sign up here</a></p>
             </form>
             <form id="signup-form" style="display:none;" onsubmit="signup(document.getElementById('signup-email').value, document.getElementById('display-name').value, document.getElementById('signup-password').value, document.getElementById('signup-confirm-password').value, document.getElementById('signup-code').value); return false;">
                 <label for="signup-email">Email</label><br>
@@ -72,7 +72,7 @@
                 <label for="signup-code">Access Code</label><br>
                 <input type="password" id="signup-code" name="signup-code" placeholder="Access code"><br>
                 <input type="submit" value="Sign Up">
-                <p>Already have an account? <a href="#" onclick="document.getElementById('login-form').style.removeProperty('display'); document.getElementById('signup-form').style.display='none';" id="show-login">Login here</a></p>
+                <p>Already have an account? <a href="#" onclick="document.getElementById('login-form').style.removeProperty('display'); document.getElementById('signup-form').style.display='none'; document.getElementById('acnt-title').textContent = 'Login';" id="show-login">Login here</a></p>
             </form>
         </div>
     </div>
@@ -83,6 +83,7 @@
             <h2>Admin</h2>
             <button class="profile-button" id="create-folder-btn" onclick="createFolder();">Create Folder</button>
             <button class="profile-button" id="delete-quote-btn" onclick="deleteQuote();">Delete Quote</button>
+            <button class="profile-button" id="delete-user-btn" onclick="deleteAccountByDN(prompt('Enter the display name of the account you want to delete:'));">Delete User</button>
         </div>
     </div>
 
@@ -103,6 +104,7 @@
             <button class="profile-button" id="change-password-btn" onclick="changePass();">Change Password</button>
             <button class="profile-button" id="reg-psky-btn" onclick="regPsky();">Add Passkey</button>
             <button class="profile-button" id="logout-btn" onclick="logout();">Logout</button>
+            <button class="profile-button" id="delete-account-btn" onclick="deleteAccount();">Delete Account</button>
         </div>
     </div>
 

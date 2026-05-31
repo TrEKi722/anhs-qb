@@ -167,6 +167,11 @@ async function login(em, pa) {
         document.getElementById("login-btn-container").style.display = "none";
         document.getElementById("actions-container").style.display = "flex";
         acntModal.style.display = "none";
+        const { data: profile } = await supabaseC.from('profiles').select('is_admin').eq('id', data.user.id).single();
+        admin = profile.is_admin;
+        if (admin) {
+            document.getElementById("admin-btn").style.removeProperty("display");
+        }
     } else {
         const loginErrors = {
             "Invalid login credentials": "Incorrect email or password.",
@@ -271,6 +276,42 @@ async function logout() {
         profModal.style.display = "none";
         loadProfile();
     }
+}
+
+async function deleteAccountByDN(displayName) {
+    if (!displayName) return showToast("Display name is required to delete an account.");
+
+    if (confirm('Are you sure you wish to delete the account with display name "' + displayName + '"? This action cannot be undone.')) {
+        const { data, error } = await supabaseC
+            .from('profiles')
+            .select('id')
+            .eq('display_name', displayName)
+        deleteAccount(data?.[0]?.id);
+    }
+}
+
+async function deleteAccount(uuid = null) {
+    const target = uuid ?? (await supabaseC.auth.getSession()).data.session.user.id;
+    if (!confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
+
+    let res, data;
+    try {
+        res = await fetch("/api/deleteUser", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ uuid: ( target ) }),
+        });
+        data = await res.json();
+    } catch {
+        return showToast("Network error. Please try again.");
+    }
+
+    if (res.success) {
+        showToast("Account deleted successfully. Reloading...");
+        setTimeout(() => {
+            window.location.reload();
+        }, 2000);
+    } else return showToast("Error deleting account. Please try again.");
 }
 
 async function loginWithPasskey() {
@@ -568,6 +609,8 @@ async function deleteQuote() {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('folder', new URLSearchParams(window.location.search).get('folder'));
+
+    if (!confirm('Are you sure you want to delete "' + name + '"? This action cannot be undone.')) return;
 
     const res = await fetch('/api/delete', {
         method: 'POST',
