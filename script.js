@@ -589,7 +589,7 @@ document.getElementById('create-submit-btn').onclick = async function () {
             canvas.toBlob(b => b ? resolve(b) : reject(new Error('Failed to generate image')), 'image/png')
         );
 
-        const { ok } = await postToUploadApi(blob, `${attributionText.replace(/\s+/g, '_').toLowerCase()}-${Math.random().toString(36).substring(2, 10)}.png`, folder, quoteText, attributionText, token);
+        const { ok } = await postToUploadApi(blob, `${attributionText.replace(/\s+/g, '').toLowerCase()}${Math.random().toString(36).substring(2, 10)}.png`, folder, quoteText, attributionText, token);
         if (!ok) {
             showToast('Upload failed.');
         } else {
