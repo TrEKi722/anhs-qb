@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
     }
 
     if (window.location.pathname == "/" && !window.location.search) {
-        window.location.href = "/?folder=2026";
+        window.location.href = "/?folder=2027";
     }
 });
 
