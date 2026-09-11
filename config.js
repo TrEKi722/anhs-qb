@@ -44,5 +44,17 @@ const TEMPLATES = {
         photo:       { cx: 540,  cy: 675,  w: 1080, h: 1350, angle: 0},
         quote:       { cx: 28,   cy: 838,  maxW: 812,  size: 56, weight: "normal", color: "white", font: "Playfair Display", align: "left"},
         attribution: { cx: 28,   cy: 1120, maxW: 1072, size: 65, weight: "normal", color: "white", font: "Poppins", align: "left"}
-      }
+    },
+    "8": {
+        layers: ["photo", "template", "text"],
+        photo:       { cx: 772.5, cy: 1000, w: 1545, h: 2000, angle: 0 },
+        quote:       { cx: 770,   cy: 209,  maxW: 1451, size: 44, weight: "normal", color: "white", font: "Sigher", align: "center" },
+        attribution: { cx: 371,  cy: 446,  maxW: 715,  size: 45, weight: "normal", color: "white", font: "Sigher", align: "left" },
+    },
+    "9": {
+        layers: ["photo", "template", "text"],
+        photo:       { cx: 772.5, cy: 1000, w: 1545, h: 2000, angle: 0 },
+        quote:       { cx: 768,  cy: 1416, maxW: 1451, size: 44, weight: "normal", color: "white", font: "Sigher", align: "center" },
+        attribution: { cx: 57,   cy: 1669, maxW: 1301, size: 65, weight: "normal", color: "white", font: "Playfair Display", align: "left" },
+    }
 };
